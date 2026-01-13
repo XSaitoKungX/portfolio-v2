@@ -5,6 +5,25 @@
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Portfolio&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Modern%20Full-Stack%20Portfolio%20%7C%20TanStack%20Start%20%7C%20React%2019&descAlignY=52&descSize=18"/>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<!-- 🚀 LIVE DEMO -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<div align="center">
+
+## 🌐 Live Demo
+
+**🔗 [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)**
+
+<a href="https://portfolio.novaplex.xyz/" target="_blank">
+  <img src="https://img.shields.io/badge/🚀_Live_Site-Visit_Now-6366f1?style=for-the-badge&labelColor=1e293b" alt="Live Demo"/>
+</a>
+<a href="https://vercel.com/xsaitokungx/portfolio-v2" target="_blank">
+  <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"/>
+</a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 🎯 BADGES & PROJECT INFO -->
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 
@@ -30,17 +49,24 @@
 
 Ein modernes, hochperformantes Portfolio-Projekt, gebaut mit den neuesten Web-Technologien. Dieses Projekt kombiniert **TanStack Start** für Server-Side Rendering, **React 19** für die UI, **Appwrite** als Backend-as-a-Service und **Tailwind CSS v4** für modernes Styling.
 
+### 🏗️ Architecture
+
+- **Frontend (Vercel)**: TanStack Start SSR Application auf Vercel Edge Network
+- **Backend (Appwrite)**: Database & Storage auf Appwrite Cloud
+- **Domain**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
+
 ### ✨ Key Features
 
-- 🚀 **TanStack Start** - Full-Stack React Framework mit SSR
+- 🚀 **TanStack Start** - Full-Stack React Framework mit SSR auf Vercel
 - ⚡ **Bun Runtime** - Blazing fast JavaScript runtime
 - 🎨 **5 Theme-Varianten** - Royal Purple, Midnight, Sunset, Neon, Aurora
 - 📝 **Blog-System** - Markdown-basierte Blog-Posts mit Kategorien & Tags
 - 🔐 **Authentication** - Vollständiges Auth-System mit Appwrite
 - 🎯 **Type-Safe Routing** - File-based routing mit TanStack Router
-- 💾 **Smart Asset Preloading** - Intelligentes Asset-Management im Production Server
+- 💾 **Appwrite Backend** - Database & Storage für Blog-Posts und Projekte
 - 🎭 **shadcn/ui Components** - Moderne, accessible UI-Komponenten
 - 📱 **Responsive Design** - Mobile-first Ansatz
+- 🌐 **Edge Deployment** - Deployed auf Vercel Edge Network
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 🛠️ TECH STACK -->
@@ -260,6 +286,11 @@ bunx shadcn@latest add dialog
 
 ## 🚀 Deployment
 
+### 🌐 Live Production
+
+**Frontend**: Deployed on [Vercel](https://vercel.com) → [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)  
+**Backend**: [Appwrite Cloud](https://cloud.appwrite.io) (Database & Storage)
+
 ### Quick Deploy
 
 ```bash
@@ -270,24 +301,49 @@ bun run deploy:vercel
 bun run deploy:preview
 ```
 
-### Supported Platforms
+### Architecture Overview
 
-- ✅ **Vercel** (Recommended) - Zero-config deployment
-- ✅ **Appwrite Cloud** - Backend hosting
-- ✅ **Netlify** - Alternative hosting
-- ✅ **Cloudflare Pages** - Edge deployment
-- ✅ **Railway** - Container deployment
+```
+┌─────────────────────────────────────────────────────────┐
+│                     User Browser                        │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              Vercel Edge Network                        │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │   TanStack Start SSR Application                 │  │
+│  │   - Server-Side Rendering                        │  │
+│  │   - API Routes (/rss, /sitemap)                  │  │
+│  │   - Static Assets                                │  │
+│  └──────────────────┬───────────────────────────────┘  │
+└─────────────────────┼───────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────┐
+│              Appwrite Cloud                             │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │   Database: portfolio-db                         │  │
+│  │   - blog-posts collection                        │  │
+│  │   - projects collection                          │  │
+│  │                                                   │  │
+│  │   Storage: portfolio-images                      │  │
+│  │   - Blog images                                  │  │
+│  │   - Project screenshots                          │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
 
 ### Production Build
 
 ```bash
-# Build for production
-bun run build:prod
+# Build for production (generates Vercel serverless functions)
+bun run build
 
 # Preview production build locally
 bun run preview
 
-# Start production server
+# Start production server (for local testing)
 bun run start
 ```
 
@@ -297,7 +353,7 @@ For complete deployment instructions, see **[DEPLOYMENT.md](./DEPLOYMENT.md)**
 
 Topics covered:
 - Vercel deployment (CLI & GitHub)
-- Appwrite backend setup
+- Appwrite backend setup (Database & Storage only)
 - Environment variables configuration
 - Performance optimization
 - Troubleshooting
@@ -305,14 +361,14 @@ Topics covered:
 
 ### Environment Variables
 
-Required for production:
+Required for production (set in Vercel Dashboard):
 
 ```bash
 # Client-side (exposed to browser)
 VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
 VITE_APPWRITE_PROJECT_ID=696615c200386f6d3ba3
 
-# Server-side (secure)
+# Server-side (secure - Vercel only)
 APPWRITE_API_KEY=your_api_key_here
 APPWRITE_BUCKET_ID=portfolio-images
 NODE_ENV=production

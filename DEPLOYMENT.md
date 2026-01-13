@@ -1,11 +1,17 @@
 # 🚀 Deployment Guide
 
-This guide covers deploying your portfolio to both Vercel and Appwrite.
+This guide covers deploying your portfolio with **Vercel** for frontend hosting and **Appwrite** for backend services (database & storage).
+
+## 🏗️ Architecture
+
+- **Frontend**: Vercel Edge Network (TanStack Start SSR)
+- **Backend**: Appwrite Cloud (Database & Storage only)
+- **Live Site**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
 
 ## 📋 Prerequisites
 
-- [Vercel Account](https://vercel.com)
-- [Appwrite Cloud Account](https://cloud.appwrite.io) or self-hosted instance
+- [Vercel Account](https://vercel.com) - For frontend hosting
+- [Appwrite Cloud Account](https://cloud.appwrite.io) - For backend services only
 - [Bun](https://bun.sh) or Node.js installed
 - Git repository connected to GitHub
 
@@ -29,9 +35,21 @@ PORT=3000
 NODE_ENV=production
 ```
 
-## 🌐 Deploy to Vercel
+## 🌐 Deploy Frontend to Vercel
 
-### Option 1: Vercel CLI (Recommended)
+**Note**: Vercel hosts the entire frontend application. Appwrite is only used for backend services (database & storage).
+
+### Option 1: GitHub Integration (Recommended)
+
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import your GitHub repository: `XSaitoKungX/portfolio-v2`
+3. Vercel auto-detects TanStack Start configuration
+4. Add environment variables (see below)
+5. Click **Deploy**!
+
+Your site will be available at: `https://your-project.vercel.app`
+
+### Option 2: Vercel CLI
 
 ```bash
 # Install Vercel CLI
@@ -47,28 +65,28 @@ vercel
 vercel --prod
 ```
 
-### Option 2: GitHub Integration
-
-1. Go to [vercel.com/new](https://vercel.com/new)
-2. Import your GitHub repository
-3. Configure build settings:
-   - **Framework Preset**: Vite
-   - **Build Command**: `bun run build`
-   - **Output Directory**: `dist`
-   - **Install Command**: `bun install`
-4. Add environment variables in Vercel dashboard
-5. Deploy!
-
 ### Vercel Environment Variables
 
 Add these in **Project Settings → Environment Variables**:
 
-```
+```bash
+# Required for all environments (Production, Preview, Development)
 VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
 VITE_APPWRITE_PROJECT_ID=696615c200386f6d3ba3
+
+# Optional: Server-side API key (if using Appwrite Admin SDK)
+APPWRITE_API_KEY=your_api_key_here
+APPWRITE_BUCKET_ID=portfolio-images
 ```
 
-## ☁️ Appwrite Backend Setup
+### Custom Domain (Optional)
+
+1. Go to **Project Settings → Domains**
+2. Add your custom domain (e.g., `portfolio.novaplex.xyz`)
+3. Configure DNS records as instructed
+4. Wait for SSL certificate provisioning
+
+## ☁️ Appwrite Backend Setup (Database & Storage Only)
 
 ### 1. Install Appwrite CLI
 
@@ -115,11 +133,11 @@ Go to your Appwrite Console:
 
 ## 🔄 Continuous Deployment
 
-### Automatic Deployments
+### Automatic Deployments (Vercel)
 
-Vercel automatically deploys:
-- **Production**: Pushes to `main` branch
-- **Preview**: Pull requests and other branches
+Vercel automatically deploys your frontend:
+- **Production**: Pushes to `main` branch → [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
+- **Preview**: Pull requests and other branches → `https://portfolio-v2-*.vercel.app`
 
 ### Manual Deployment
 
@@ -129,6 +147,37 @@ bun run deploy:vercel
 
 # Deploy preview
 bun run deploy:preview
+```
+
+### Deployment Flow
+
+```
+┌──────────────────┐
+│  Git Push        │
+│  (main branch)   │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  GitHub          │
+│  Repository      │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Vercel          │
+│  Auto-Deploy     │
+│  - Build         │
+│  - Deploy        │
+│  - Edge Network  │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Live Site       │
+│  portfolio.      │
+│  novaplex.xyz    │
+└──────────────────┘
 ```
 
 ## 🧪 Testing Deployment

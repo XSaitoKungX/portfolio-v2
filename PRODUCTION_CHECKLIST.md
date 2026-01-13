@@ -1,5 +1,8 @@
 # 🚀 Production Deployment Checklist
 
+**Live Site**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)  
+**Architecture**: Vercel (Frontend) + Appwrite (Backend)
+
 ## ✅ Pre-Deployment
 
 ### Code Quality
@@ -50,48 +53,52 @@
 - [ ] Session duration set appropriately
 - [ ] Email templates customized (optional)
 
-## 🌐 Vercel Deployment
+## 🌐 Vercel Deployment (Frontend)
 
 ### Initial Setup
-- [ ] Vercel account created
-- [ ] GitHub repository connected
-- [ ] Project imported to Vercel
+- [x] Vercel account created
+- [x] GitHub repository connected: `XSaitoKungX/portfolio-v2`
+- [x] Project imported to Vercel
+- [x] Auto-deployment configured
 
 ### Build Configuration
-- [ ] Framework: Vite
-- [ ] Build Command: `bun run build`
-- [ ] Output Directory: `dist`
-- [ ] Install Command: `bun install`
+- [x] TanStack Start auto-detected
+- [x] Build Command: `bun run build`
+- [x] Nitro generates `.vercel/output/` automatically
+- [x] Install Command: `bun install`
 
 ### Environment Variables
-- [ ] `VITE_APPWRITE_ENDPOINT` added
-- [ ] `VITE_APPWRITE_PROJECT_ID` added
-- [ ] `NODE_ENV=production` set
-- [ ] All variables applied to Production environment
+- [x] `VITE_APPWRITE_ENDPOINT` = `https://cloud.appwrite.io/v1`
+- [x] `VITE_APPWRITE_PROJECT_ID` = `696615c200386f6d3ba3`
+- [ ] `APPWRITE_API_KEY` (optional, for server-side operations)
+- [x] All variables applied to Production, Preview, Development
 
 ### Domain & SSL
-- [ ] Custom domain configured (if applicable)
-- [ ] SSL certificate active
-- [ ] DNS records propagated
-- [ ] WWW redirect configured (if needed)
+- [x] Custom domain configured: `portfolio.novaplex.xyz`
+- [x] SSL certificate active (automatic via Vercel)
+- [x] DNS records propagated
+- [x] HTTPS enforced
 
 ## 🧪 Post-Deployment Testing
 
+**Test URL**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
+
 ### Functionality
-- [ ] Homepage loads correctly
-- [ ] Blog posts display properly
-- [ ] Navigation works on all pages
-- [ ] Theme switcher functional
-- [ ] RSS feed accessible at `/rss`
-- [ ] Sitemap accessible at `/sitemap`
-- [ ] 404 page displays correctly
+- [x] Homepage loads correctly
+- [x] Blog posts display properly
+- [x] Navigation works on all pages
+- [x] Theme switcher functional
+- [x] RSS feed accessible at `/rss`
+- [x] Sitemap accessible at `/sitemap`
+- [x] 404 page displays correctly
+- [x] Appwrite data fetching works
 
 ### Performance
 - [ ] Lighthouse score > 90 (Performance)
 - [ ] First Contentful Paint < 1.5s
 - [ ] Time to Interactive < 3.5s
 - [ ] Cumulative Layout Shift < 0.1
-- [ ] Images loading efficiently
+- [ ] Images loading efficiently from Appwrite Storage
 
 ### SEO
 - [ ] Meta tags present on all pages
@@ -99,6 +106,7 @@
 - [ ] Twitter Card tags set
 - [ ] Sitemap submitted to Google Search Console
 - [ ] robots.txt configured correctly
+- [ ] RSS feed discoverable
 
 ### Mobile
 - [ ] Responsive on mobile devices
@@ -113,6 +121,13 @@
 - [ ] Safari (latest)
 - [ ] Mobile Safari (iOS)
 - [ ] Chrome Mobile (Android)
+
+### Backend Integration
+- [x] Appwrite database connection working
+- [x] Blog posts loading from Appwrite
+- [x] Projects loading from Appwrite
+- [x] Images loading from Appwrite Storage
+- [ ] Authentication flow working (if enabled)
 
 ## 🔒 Security
 
