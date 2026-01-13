@@ -47,26 +47,26 @@
 
 ## <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30"> About This Project
 
-Ein modernes, hochperformantes Portfolio-Projekt, gebaut mit den neuesten Web-Technologien. Dieses Projekt kombiniert **TanStack Start** für Server-Side Rendering, **React 19** für die UI, **Appwrite** als Backend-as-a-Service und **Tailwind CSS v4** für modernes Styling.
+A modern, high-performance portfolio project built with the latest web technologies. This project combines **TanStack Start** for Server-Side Rendering, **React 19** for the UI, **Appwrite** as Backend-as-a-Service, and **Tailwind CSS v4** for modern styling.
 
 ### 🏗️ Architecture
 
-- **Frontend (Vercel)**: TanStack Start SSR Application auf Vercel Edge Network
-- **Backend (Appwrite)**: Database & Storage auf Appwrite Cloud
+- **Frontend (Vercel)**: TanStack Start SSR Application on Vercel Edge Network
+- **Backend (Appwrite)**: Database & Storage on Appwrite Cloud
 - **Domain**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
 
 ### ✨ Key Features
 
-- 🚀 **TanStack Start** - Full-Stack React Framework mit SSR auf Vercel
+- 🚀 **TanStack Start** - Full-Stack React Framework with SSR on Vercel
 - ⚡ **Bun Runtime** - Blazing fast JavaScript runtime
-- 🎨 **5 Theme-Varianten** - Royal Purple, Midnight, Sunset, Neon, Aurora
-- 📝 **Blog-System** - Markdown-basierte Blog-Posts mit Kategorien & Tags
-- 🔐 **Authentication** - Vollständiges Auth-System mit Appwrite
-- 🎯 **Type-Safe Routing** - File-based routing mit TanStack Router
-- 💾 **Appwrite Backend** - Database & Storage für Blog-Posts und Projekte
-- 🎭 **shadcn/ui Components** - Moderne, accessible UI-Komponenten
-- 📱 **Responsive Design** - Mobile-first Ansatz
-- 🌐 **Edge Deployment** - Deployed auf Vercel Edge Network
+- 🎨 **5 Theme Variants** - Royal Purple, Midnight, Sunset, Neon, Aurora
+- 📝 **Blog System** - Markdown-based blog posts with categories & tags
+- 🔐 **Authentication** - Complete auth system with Appwrite
+- 🎯 **Type-Safe Routing** - File-based routing with TanStack Router
+- 💾 **Appwrite Backend** - Database & Storage for blog posts and projects
+- 🎭 **shadcn/ui Components** - Modern, accessible UI components
+- 📱 **Responsive Design** - Mobile-first approach
+- 🌐 **Edge Deployment** - Deployed on Vercel Edge Network
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 🛠️ TECH STACK -->
@@ -128,32 +128,32 @@ Ein modernes, hochperformantes Portfolio-Projekt, gebaut mit den neuesten Web-Te
 ### 📋 Prerequisites
 
 - **Bun** >= 1.0.0 ([Installation](https://bun.sh/docs/installation))
-- **Node.js** >= 20.0.0 (optional, für npm-Kompatibilität)
+- **Node.js** >= 20.0.0 (optional, for npm compatibility)
 - **Appwrite** Account ([Sign up](https://cloud.appwrite.io/register))
 
 ### ⚡ Quick Start
 
 ```bash
-# 1. Repository klonen
+# 1. Clone repository
 git clone <your-repo-url>
 cd portfolio
 
-# 2. Dependencies installieren
+# 2. Install dependencies
 bun install
 
-# 3. Environment Variables konfigurieren
+# 3. Configure environment variables
 cp .env.example .env
-# Bearbeite .env und füge deine Appwrite-Credentials ein
+# Edit .env and add your Appwrite credentials
 
-# 4. Development Server starten
+# 4. Start development server
 bun run dev
 ```
 
-Die App läuft jetzt auf **http://localhost:5173** 🎉
+The app is now running on **http://localhost:5173** 🎉
 
 ### 🔑 Environment Setup
 
-Erstelle eine `.env` Datei im Root-Verzeichnis:
+Create a `.env` file in the root directory:
 
 ```bash
 # Appwrite Configuration
@@ -169,7 +169,7 @@ PORT=3000
 INSTRUMENTATION_SCRIPT_SRC=
 ```
 
-> **⚠️ Wichtig:** Die App benötigt gültige Appwrite-Credentials, um zu funktionieren!
+> **⚠️ Important:** The app requires valid Appwrite credentials to function!
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 📦 AVAILABLE SCRIPTS -->
@@ -244,26 +244,26 @@ portfolio/
 
 ### 🌈 Theme System
 
-Das Projekt enthält 5 vorkonfigurierte Themes in `src/lib/site-config.ts`:
+The project includes 5 pre-configured themes in `src/lib/site-config.ts`:
 
-- **Royal Purple** - Elegantes Lila-Theme (Default)
-- **Midnight** - Dunkelblaues Theme
-- **Sunset** - Warmes Orange-Theme
-- **Neon** - Grünes Cyberpunk-Theme
-- **Aurora** - Cyan-basiertes Theme
+- **Royal Purple** - Elegant purple theme (Default)
+- **Midnight** - Dark blue theme
+- **Sunset** - Warm orange theme
+- **Neon** - Green cyberpunk theme
+- **Aurora** - Cyan-based theme
 
-Jedes Theme enthält:
+Each theme includes:
 - Custom Color Palette
 - Typography (Google Fonts)
 - Tailwind CSS Variables
 
 ### 📝 Blog System
 
-- Markdown-basierte Posts mit Frontmatter
-- Kategorien & Tags
+- Markdown-based posts with frontmatter
+- Categories & Tags
 - Code Syntax Highlighting
 - Reading Time Estimation
-- SEO-optimiert
+- SEO-optimized
 
 ### 🔐 Authentication
 
@@ -403,20 +403,20 @@ NODE_ENV=production
 
 ## 🤝 Contributing
 
-Contributions are welcome! Bitte beachte folgende Schritte:
+Contributions are welcome! Please follow these steps:
 
-1. Fork das Repository
-2. Erstelle einen Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Committe deine Änderungen (`git commit -m 'Add some AmazingFeature'`)
-4. Push zum Branch (`git push origin feature/AmazingFeature`)
-5. Öffne einen Pull Request
+1. Fork the repository
+2. Create a Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ### Code Style
 
-- Verwende **Prettier** für Code-Formatierung
-- Befolge **ESLint** Regeln
-- Schreibe **TypeScript** mit strikten Types
-- Füge **Tests** für neue Features hinzu
+- Use **Prettier** for code formatting
+- Follow **ESLint** rules
+- Write **TypeScript** with strict types
+- Add **tests** for new features
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 📄 LICENSE -->
@@ -424,7 +424,7 @@ Contributions are welcome! Bitte beachte folgende Schritte:
 
 ## 📄 License
 
-Dieses Projekt ist unter der MIT License lizenziert.
+This project is licensed under the MIT License.
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 🙏 ACKNOWLEDGMENTS -->
@@ -432,10 +432,10 @@ Dieses Projekt ist unter der MIT License lizenziert.
 
 ## 🙏 Acknowledgments
 
-- [TanStack](https://tanstack.com) - Für die großartigen Libraries
-- [Appwrite](https://appwrite.io) - Für das Backend-as-a-Service
-- [shadcn](https://ui.shadcn.com) - Für die UI-Komponenten
-- [Vercel](https://vercel.com) - Für das Hosting
+- [TanStack](https://tanstack.com) - For the amazing libraries
+- [Appwrite](https://appwrite.io) - For the Backend-as-a-Service
+- [shadcn](https://ui.shadcn.com) - For the UI components
+- [Vercel](https://vercel.com) - For the hosting
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 📊 PROJECT STATUS -->
