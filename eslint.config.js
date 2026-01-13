@@ -14,6 +14,7 @@ export default tseslint.config(
       'src/components/ui/**',
       '.output',
       '.nitro',
+      '.vercel/**',
       'prettier.config.js',
       'eslint.config.js',
       'src/routeTree.gen.ts',
