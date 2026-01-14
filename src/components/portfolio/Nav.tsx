@@ -207,7 +207,7 @@ export function Nav() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-56 rounded-xl overflow-hidden"
+                        className="absolute right-0 top-full mt-3 w-56 rounded-xl overflow-hidden"
                         style={{
                           background: 'var(--card)',
                           border: '1px solid var(--border)',
