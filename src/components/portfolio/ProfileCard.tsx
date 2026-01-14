@@ -13,7 +13,7 @@ import {
 } from 'react-icons/lu'
 import { FaDiscord } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'motion/react'
-import { Sparkles, Verified, Code2, Briefcase, Calendar, ChevronDown, ChevronUp } from 'lucide-react'
+import { Sparkles, Verified, Code2, Briefcase, Calendar, ChevronDown, ChevronUp, MapPin } from 'lucide-react'
 
 const iconMap: Record<string, ComponentType<{ size?: number }>> = {
   twitter: LuTwitter,
@@ -27,15 +27,15 @@ const iconMap: Record<string, ComponentType<{ size?: number }>> = {
   discord: FaDiscord,
 }
 
+const statsIconMap: Record<string, React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>> = {
+  calendar: Calendar,
+  briefcase: Briefcase,
+  code: Code2,
+}
+
 export function ProfileCard() {
   const { owner } = siteConfig
   const [showExtendedBio, setShowExtendedBio] = useState(false)
-
-  const stats = [
-    { label: 'Years Experience', value: '3+', icon: Calendar },
-    { label: 'Projects', value: '15+', icon: Briefcase },
-    { label: 'Technologies', value: '20+', icon: Code2 },
-  ]
 
   return (
     <motion.aside
@@ -60,30 +60,51 @@ export function ProfileCard() {
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
         }}
       >
-        {/* Header gradient with animated pattern */}
-        <div
-          className="h-24 relative overflow-hidden"
-          style={{
-            background: `linear-gradient(135deg, var(--primary), var(--accent))`,
-          }}
-        >
-          {/* Animated floating particles */}
-          <motion.div
-            className="absolute inset-0"
-            animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              repeatType: 'reverse',
-            }}
-            style={{
-              backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 2px, transparent 2px),
-                               radial-gradient(circle at 80% 30%, rgba(255,255,255,0.2) 2px, transparent 2px),
-                               radial-gradient(circle at 40% 80%, rgba(255,255,255,0.25) 1px, transparent 1px),
-                               radial-gradient(circle at 60% 20%, rgba(255,255,255,0.2) 1px, transparent 1px)`,
-              backgroundSize: '80px 80px, 60px 60px, 40px 40px, 50px 50px',
-            }}
-          />
+        {/* Custom Banner or Gradient Header */}
+        <div className="h-28 relative overflow-hidden">
+          {owner.banner ? (
+            <>
+              <img
+                src={owner.banner}
+                alt="Profile Banner"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              {/* Overlay gradient for better text visibility */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(to top, var(--card) 0%, transparent 50%)',
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                }}
+              />
+              {/* Animated floating particles */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                }}
+                style={{
+                  backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 2px, transparent 2px),
+                                   radial-gradient(circle at 80% 30%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                                   radial-gradient(circle at 40% 80%, rgba(255,255,255,0.25) 1px, transparent 1px),
+                                   radial-gradient(circle at 60% 20%, rgba(255,255,255,0.2) 1px, transparent 1px)`,
+                  backgroundSize: '80px 80px, 60px 60px, 40px 40px, 50px 50px',
+                }}
+              />
+            </>
+          )}
 
           {/* Shimmer effect */}
           <motion.div
@@ -170,6 +191,18 @@ export function ProfileCard() {
             >
               {owner.role}
             </motion.p>
+            {owner.location && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.45 }}
+                className="flex items-center gap-1 mt-1 text-xs"
+                style={{ color: 'var(--foreground-muted)' }}
+              >
+                <MapPin size={12} />
+                {owner.location}
+              </motion.div>
+            )}
           </div>
 
           {/* Bio */}
@@ -223,44 +256,46 @@ export function ProfileCard() {
             </button>
           </div>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-3 gap-3">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon
-              return (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  className="p-3 rounded-xl text-center transition-all duration-200"
-                  style={{
-                    backgroundColor: 'var(--background-secondary)',
-                    border: '1px solid var(--border)',
-                  }}
-                >
-                  <Icon
-                    size={18}
-                    className="mx-auto mb-1"
-                    style={{ color: 'var(--primary)' }}
-                  />
-                  <div
-                    className="text-lg font-bold"
-                    style={{ color: 'var(--foreground)' }}
+          {/* Stats Section - Using real data from config */}
+          {owner.stats && owner.stats.length > 0 && (
+            <div className="grid grid-cols-3 gap-3">
+              {owner.stats.map((stat, index) => {
+                const Icon = statsIconMap[stat.icon.toLowerCase()] || Code2
+                return (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    className="p-3 rounded-xl text-center transition-all duration-200"
+                    style={{
+                      backgroundColor: 'var(--background-secondary)',
+                      border: '1px solid var(--border)',
+                    }}
                   >
-                    {stat.value}
-                  </div>
-                  <div
-                    className="text-xs mt-0.5"
-                    style={{ color: 'var(--foreground-muted)' }}
-                  >
-                    {stat.label}
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
+                    <Icon
+                      size={18}
+                      className="mx-auto mb-1"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                    <div
+                      className="text-lg font-bold"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      {stat.value}
+                    </div>
+                    <div
+                      className="text-xs mt-0.5"
+                      style={{ color: 'var(--foreground-muted)' }}
+                    >
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          )}
 
           {/* Badges with gradient hover */}
           <div className="flex flex-wrap gap-2">
@@ -338,29 +373,31 @@ export function ProfileCard() {
             </div>
           </div>
 
-          {/* Status badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex items-center gap-2 pt-2"
-          >
+          {/* Status badge - Using real availability from config */}
+          {owner.availability && (
             <motion.div
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="flex items-center gap-2 pt-2"
             >
-              <Sparkles size={14} style={{ color: 'var(--primary)' }} />
+              <motion.div
+                animate={{ rotate: [0, 15, -15, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <Sparkles size={14} style={{ color: 'var(--primary)' }} />
+              </motion.div>
+              <span
+                className="text-xs font-medium"
+                style={{
+                  color: 'var(--foreground-muted)',
+                  fontFamily: 'var(--font-body)',
+                }}
+              >
+                {owner.availabilityText || 'Available for new projects'}
+              </span>
             </motion.div>
-            <span
-              className="text-xs font-medium"
-              style={{
-                color: 'var(--foreground-muted)',
-                fontFamily: 'var(--font-body)',
-              }}
-            >
-              Available for new projects
-            </span>
-          </motion.div>
+          )}
         </div>
       </div>
     </motion.aside>

@@ -40,6 +40,12 @@ export interface Theme {
   typography: ThemeTypography
 }
 
+export interface OwnerStats {
+  label: string
+  value: string
+  icon: string
+}
+
 export interface OwnerInfo {
   name: string
   email: string
@@ -48,7 +54,12 @@ export interface OwnerInfo {
   bio: string
   extendedBio: string
   avatar: string
+  banner?: string
+  location?: string
+  availability: boolean
+  availabilityText?: string
   badges: string[]
+  stats: OwnerStats[]
   socialLinks: SocialLink[]
 }
 
@@ -94,28 +105,28 @@ export const siteConfig: SiteConfig = {
     email: import.meta.env.VITE_OWNER_EMAIL || '',
     userId: import.meta.env.VITE_OWNER_USER_ID || '',
     role: 'Software Developer · Fachinformatiker AE',
-    bio: `
-I’m a software developer in training (Fachinformatiker für Anwendungsentwicklung) 
-with a strong focus on modern web technologies, backend systems, and clean architecture.
-I enjoy building things that are not only functional, but also understandable and maintainable.
-  `,
-    extendedBio: `
-I started programming at a young age and quickly developed a deep interest in how systems work under the hood.
-Over time, I worked with a wide range of technologies — from Python and Node.js to Java, Docker, and modern frontend frameworks.
+    bio: `I'm a software developer in training (Fachinformatiker für Anwendungsentwicklung) with a strong focus on modern web technologies, backend systems, and clean architecture. I enjoy building things that are not only functional, but also understandable and maintainable.`,
+    extendedBio: `I started programming at a young age and quickly developed a deep interest in how systems work under the hood. Over time, I worked with a wide range of technologies — from Python and Node.js to Java, Docker, and modern frontend frameworks.
 
-During my apprenticeship, I focus heavily on real-world development: APIs, databases, authentication systems,
-infrastructure, and deployment. I value clean code, clear responsibilities, and solutions that scale beyond "it works on my machine".
+During my apprenticeship, I focus heavily on real-world development: APIs, databases, authentication systems, infrastructure, and deployment. I value clean code, clear responsibilities, and solutions that scale beyond "it works on my machine".
 
-Besides development, I enjoy experimenting with hosting setups, automation, and developer tooling.
-I believe good software is built with intention, structure, and a solid understanding of fundamentals.
-  `,
+Besides development, I enjoy experimenting with hosting setups, automation, and developer tooling. I believe good software is built with intention, structure, and a solid understanding of fundamentals.`,
     avatar: 'https://avatars.githubusercontent.com/u/64774999?v=4',
+    banner: '/images/banners/saito-banner.webp',
+    location: 'Germany',
+    availability: true,
+    availabilityText: 'Available for new projects',
     badges: [
       'Software Developer',
       'Apprentice (AE)',
       'Backend & Web',
       'API & Infrastructure',
       'Clean Code',
+    ],
+    stats: [
+      { label: 'Years Coding', value: '5+', icon: 'calendar' },
+      { label: 'Projects', value: '20+', icon: 'briefcase' },
+      { label: 'Technologies', value: '15+', icon: 'code' },
     ],
     socialLinks: [
       {

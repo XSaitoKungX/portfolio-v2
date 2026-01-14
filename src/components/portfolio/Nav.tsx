@@ -222,7 +222,18 @@ export function Nav() {
                             {currentUser.email}
                           </p>
                         </div>
-                        <div className="p-2">
+                        <div className="p-2 space-y-1">
+                          <Link
+                            to="/profile"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                            style={{ color: 'var(--foreground)' }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--background-secondary)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <User size={16} />
+                            Your Profile
+                          </Link>
                           <button
                             onClick={handleSignOut}
                             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors hover:bg-red-500/10 text-red-400"
@@ -395,6 +406,19 @@ export function Nav() {
                         </p>
                       </div>
                     </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-300"
+                      style={{
+                        background: 'var(--background-secondary)',
+                        color: 'var(--foreground)',
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      <User size={18} />
+                      Your Profile
+                    </Link>
                     <button
                       onClick={handleSignOut}
                       className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-300"
