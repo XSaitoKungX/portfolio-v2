@@ -8,6 +8,7 @@ import { motion } from 'motion/react'
 import { useQuery } from '@tanstack/react-query'
 import { useServerFn } from '@tanstack/react-start'
 import { getTopUsersFn } from '@/server/functions/users'
+import { useAuth } from '@/hooks/use-auth'
 import {
   Link as LinkIcon,
   Zap,
@@ -25,6 +26,7 @@ export const Route = createFileRoute('/_public/')({
 })
 
 function HomePage() {
+  const { currentUser } = useAuth()
   const getTopUsers = useServerFn(getTopUsersFn)
   const { data: topUsers } = useQuery({
     queryKey: ['topUsers'],
@@ -83,22 +85,46 @@ function HomePage() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/sign-up"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
-                style={{ background: 'var(--primary)', color: 'white' }}
-              >
-                Get Started Free
-                <ArrowRight size={20} />
-              </Link>
-              <Link
-                to="/leaderboard"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
-                style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--foreground)' }}
-              >
-                <Trophy size={20} />
-                View Leaderboard
-              </Link>
+              {currentUser ? (
+                <>
+                  <Link
+                    to="/links"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+                    style={{ background: 'var(--primary)', color: 'white' }}
+                  >
+                    Manage Links
+                    <ArrowRight size={20} />
+                  </Link>
+                  <Link
+                    to="/$username"
+                    params={{ username: currentUser.username }}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+                    style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--foreground)' }}
+                  >
+                    <Globe size={20} />
+                    View My Page
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/sign-up"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+                    style={{ background: 'var(--primary)', color: 'white' }}
+                  >
+                    Get Started Free
+                    <ArrowRight size={20} />
+                  </Link>
+                  <Link
+                    to="/leaderboard"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+                    style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--foreground)' }}
+                  >
+                    <Trophy size={20} />
+                    View Leaderboard
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Example URL */}
@@ -212,7 +238,7 @@ function HomePage() {
                   transition={{ delay: index * 0.1 }}
                 >
                   <Link
-                    to="/u/$username"
+                    to="/$username"
                     params={{ username: item.user.username }}
                     className="block p-4 rounded-2xl transition-all hover:scale-105"
                     style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
@@ -318,35 +344,37 @@ function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="p-8 sm:p-12 rounded-3xl"
-            style={{
-              background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-            }}
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
-              Ready to Get Started?
-            </h2>
-            <p className="text-lg mb-8 text-white/80">
-              Create your free bio page today and start sharing
-            </p>
-            <Link
-              to="/sign-up"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
-              style={{ background: 'white', color: 'var(--primary)' }}
+      {/* CTA Section - only show for non-logged users */}
+      {!currentUser && (
+        <section className="py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="p-8 sm:p-12 rounded-3xl"
+              style={{
+                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+              }}
             >
-              Create Your Page
-              <ArrowRight size={20} />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
+                Ready to Get Started?
+              </h2>
+              <p className="text-lg mb-8 text-white/80">
+                Create your free bio page today and start sharing
+              </p>
+              <Link
+                to="/sign-up"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+                style={{ background: 'white', color: 'var(--primary)' }}
+              >
+                Create Your Page
+                <ArrowRight size={20} />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
