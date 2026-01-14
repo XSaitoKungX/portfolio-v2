@@ -84,8 +84,8 @@ export function Nav() {
               }}
             >
               <img
-                src="/saito.png"
-                alt={siteConfig.owner.name}
+                src="/icon.png"
+                alt={siteConfig.metadata.title}
                 className="w-full h-full object-cover"
                 loading="eager"
               />

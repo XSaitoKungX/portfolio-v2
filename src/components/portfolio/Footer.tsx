@@ -72,8 +72,8 @@ export function Footer() {
                 }}
               >
                 <img
-                  src="/saito.png"
-                  alt={siteConfig.owner.name}
+                  src="/icon.png"
+                  alt={siteConfig.metadata.title}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />

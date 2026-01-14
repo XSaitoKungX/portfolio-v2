@@ -1,15 +1,15 @@
 import { createFileRoute, useSearch, Link } from '@tanstack/react-router'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useAuth } from '@/hooks/use-auth'
 import { siteConfig } from '@/lib/site-config'
 import { updateProfileFn } from '@/server/functions/auth'
 import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
+import { ImageUpload } from '@/components/profile/image-upload'
 import {
   User,
   Mail,
-  Camera,
   Save,
   X,
   Edit3,
@@ -29,7 +29,6 @@ import {
   AtSign,
   Fingerprint,
   BadgeCheck,
-  ImagePlus,
   Palette,
   Activity,
   Eye,
@@ -58,12 +57,8 @@ function ProfilePage() {
   const [saveError, setSaveError] = useState<string | null>(null)
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'overview' | 'activity' | 'settings'>('overview')
-  
-  const bannerInputRef = useRef<HTMLInputElement>(null)
-  const avatarInputRef = useRef<HTMLInputElement>(null)
-  
-  const [bannerPreview, setBannerPreview] = useState<string | null>(null)
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [currentAvatar, setCurrentAvatar] = useState<string | null>(null)
+  const [currentBanner, setCurrentBanner] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     name: currentUser?.name || '',
@@ -100,27 +95,6 @@ function ProfilePage() {
     }
   }
 
-  const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setBannerPreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
 
   const updateProfile = useServerFn(updateProfileFn)
 
@@ -152,8 +126,6 @@ function ProfilePage() {
       website: '',
       location: '',
     })
-    setBannerPreview(null)
-    setAvatarPreview(null)
     setIsEditing(false)
     setSaveError(null)
   }
@@ -273,129 +245,100 @@ function ProfilePage() {
           }}
         >
           {/* Banner Section */}
-          <div className="relative h-48 group">
-            <div
-              className="absolute inset-0"
-              style={{
-                background: bannerPreview 
-                  ? `url(${bannerPreview}) center/cover`
-                  : 'linear-gradient(135deg, var(--primary), var(--accent), var(--primary))',
-                backgroundSize: bannerPreview ? 'cover' : '200% 200%',
-                animation: bannerPreview ? 'none' : 'gradientShift 8s ease infinite',
-              }}
-            />
-            {/* Banner Overlay Pattern */}
-            {!bannerPreview && (
+          {isViewingOwnProfile ? (
+            <div className="p-6 pb-0">
+              <ImageUpload 
+                type="banner" 
+                currentImage={currentBanner}
+                onUploadSuccess={(url) => setCurrentBanner(url)}
+              />
+            </div>
+          ) : (
+            <div className="relative h-48">
               <div
-                className="absolute inset-0 opacity-30"
+                className="absolute inset-0"
                 style={{
-                  backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 2px, transparent 2px),
-                                   radial-gradient(circle at 80% 30%, rgba(255,255,255,0.2) 2px, transparent 2px),
-                                   radial-gradient(circle at 40% 80%, rgba(255,255,255,0.25) 1px, transparent 1px)`,
-                  backgroundSize: '60px 60px, 40px 40px, 30px 30px',
+                  background: currentBanner
+                    ? `url(${currentBanner}) center/cover`
+                    : 'linear-gradient(135deg, var(--primary), var(--accent), var(--primary))',
+                  backgroundSize: currentBanner ? 'cover' : '200% 200%',
+                  animation: currentBanner ? 'none' : 'gradientShift 8s ease infinite',
                 }}
               />
-            )}
-            {/* Banner Edit Button */}
-            {isViewingOwnProfile && (
-              <motion.button
-                onClick={() => bannerInputRef.current?.click()}
-                className="absolute top-4 right-4 p-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all"
+              <div
+                className="absolute bottom-0 left-0 right-0 h-24"
                 style={{
-                  background: 'rgba(0, 0, 0, 0.6)',
-                  backdropFilter: 'blur(10px)',
-                  color: 'white',
+                  background: 'linear-gradient(to top, var(--card), transparent)',
                 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ImagePlus size={20} />
-              </motion.button>
-            )}
-            <input
-              ref={bannerInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleBannerChange}
-              className="hidden"
-            />
-            {/* Gradient Overlay at Bottom */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-24"
-              style={{
-                background: 'linear-gradient(to top, var(--card), transparent)',
-              }}
-            />
-          </div>
+              />
+            </div>
+          )}
 
           {/* Profile Header */}
           <div className="px-6 -mt-16 relative z-10">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               {/* Avatar */}
-              <div className="relative group">
-                <motion.div
-                  className="w-32 h-32 rounded-3xl overflow-hidden"
-                  style={{
-                    boxShadow: '0 0 0 6px var(--card), 0 0 30px rgba(var(--primary-rgb, 99, 102, 241), 0.3)',
-                    background: 'var(--background-secondary)',
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
-                  ) : currentUser.name ? (
-                    <div
-                      className="w-full h-full flex items-center justify-center text-5xl font-bold"
-                      style={{
-                        background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                        color: 'white',
-                      }}
-                    >
-                      {currentUser.name.charAt(0).toUpperCase()}
-                    </div>
-                  ) : (
-                    <div
-                      className="w-full h-full flex items-center justify-center"
-                      style={{ color: 'var(--foreground-muted)' }}
-                    >
-                      <User size={60} />
-                    </div>
-                  )}
-                </motion.div>
-                {/* Avatar Edit Button */}
-                {isViewingOwnProfile && (
-                  <motion.button
-                    onClick={() => avatarInputRef.current?.click()}
-                    className="absolute bottom-2 right-2 p-2.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all"
+              {isViewingOwnProfile ? (
+                <div className="relative">
+                  <ImageUpload 
+                    type="avatar" 
+                    currentImage={currentAvatar}
+                    onUploadSuccess={(url) => setCurrentAvatar(url)}
+                  />
+                  {/* Online Status Indicator */}
+                  <motion.div
+                    className="absolute bottom-1 right-1 w-6 h-6 rounded-full border-4"
                     style={{
-                      background: 'var(--primary)',
-                      color: 'white',
-                      boxShadow: '0 4px 15px rgba(var(--primary-rgb, 99, 102, 241), 0.4)',
+                      backgroundColor: '#22c55e',
+                      borderColor: 'var(--card)',
                     }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+              ) : (
+                <div className="relative">
+                  <motion.div
+                    className="w-32 h-32 rounded-3xl overflow-hidden"
+                    style={{
+                      boxShadow: '0 0 0 6px var(--card), 0 0 30px rgba(var(--primary-rgb, 99, 102, 241), 0.3)',
+                      background: 'var(--background-secondary)',
+                    }}
+                    whileHover={{ scale: 1.02 }}
                   >
-                    <Camera size={18} />
-                  </motion.button>
-                )}
-                <input
-                  ref={avatarInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  className="hidden"
-                />
-                {/* Online Status Indicator */}
-                <motion.div
-                  className="absolute bottom-1 right-1 w-6 h-6 rounded-full border-4"
-                  style={{
-                    backgroundColor: '#22c55e',
-                    borderColor: 'var(--card)',
-                  }}
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              </div>
+                    {currentAvatar ? (
+                      <img src={currentAvatar} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : currentUser.name ? (
+                      <div
+                        className="w-full h-full flex items-center justify-center text-5xl font-bold"
+                        style={{
+                          background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                          color: 'white',
+                        }}
+                      >
+                        {currentUser.name.charAt(0).toUpperCase()}
+                      </div>
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ color: 'var(--foreground-muted)' }}
+                      >
+                        <User size={60} />
+                      </div>
+                    )}
+                  </motion.div>
+                  {/* Online Status Indicator */}
+                  <motion.div
+                    className="absolute bottom-1 right-1 w-6 h-6 rounded-full border-4"
+                    style={{
+                      backgroundColor: '#22c55e',
+                      borderColor: 'var(--card)',
+                    }}
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+              )}
 
               {/* Action Buttons */}
               <div className="flex gap-2 pb-2">

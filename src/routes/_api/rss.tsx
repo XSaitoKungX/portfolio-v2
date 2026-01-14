@@ -65,7 +65,7 @@ export const Route = createFileRoute('/_api/rss')({
     <lastBuildDate>${buildDate}</lastBuildDate>
     <atom:link href="${baseUrl}/rss" rel="self" type="application/rss+xml"/>
     <image>
-      <url>${baseUrl}/saito.png</url>
+      <url>${baseUrl}/icon.png</url>
       <title>${siteConfig.metadata.title}</title>
       <link>${baseUrl}</link>
     </image>
