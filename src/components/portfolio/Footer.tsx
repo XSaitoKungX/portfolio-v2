@@ -12,7 +12,19 @@ import {
   LuGlobe,
 } from 'react-icons/lu'
 import { FaDiscord } from 'react-icons/fa'
-import { Heart, Sparkles, ArrowUpRight, ChevronRight } from 'lucide-react'
+import {
+  Heart,
+  Sparkles,
+  ArrowUpRight,
+  Link as LinkIcon,
+  BarChart3,
+  Palette,
+  Shield,
+  Zap,
+  Globe,
+  Mail,
+  MapPin,
+} from 'lucide-react'
 
 const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   twitter: LuTwitter,
@@ -26,99 +38,114 @@ const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   discord: FaDiscord,
 }
 
+const footerLinks = {
+  product: [
+    { label: 'Features', href: '/about' },
+    { label: 'Pricing', href: '/about' },
+    { label: 'Changelog', href: '/archive' },
+    { label: 'Creators', href: '/leaderboard' },
+  ],
+  resources: [
+    { label: 'Documentation', href: '/about' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Support', href: '/about' },
+    { label: 'API', href: '/about' },
+  ],
+  company: [
+    { label: 'About', href: '/about' },
+    { label: 'Careers', href: '/about' },
+    { label: 'Privacy', href: '/about' },
+    { label: 'Terms', href: '/about' },
+  ],
+}
+
+const features = [
+  { icon: LinkIcon, label: 'Bio Links' },
+  { icon: BarChart3, label: 'Analytics' },
+  { icon: Palette, label: 'Themes' },
+  { icon: Shield, label: 'Secure' },
+]
+
 export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer
-      className="relative mt-auto overflow-hidden"
-      style={{
-        backgroundColor: 'var(--background-secondary)',
-      }}
-    >
-      {/* Top decorative border with gradient */}
+    <footer className="relative mt-auto overflow-hidden" style={{ background: 'var(--background-secondary)' }}>
+      {/* Top gradient border */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
-          background:
-            'linear-gradient(90deg, transparent, var(--primary), var(--accent), var(--primary), transparent)',
+          background: 'linear-gradient(90deg, transparent, var(--primary), var(--accent), var(--primary), transparent)',
         }}
       />
 
-      {/* Background glow effects */}
+      {/* Background effects */}
       <div
-        className="absolute top-0 left-1/4 w-96 h-96 rounded-full pointer-events-none opacity-10 blur-3xl"
+        className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none opacity-5 blur-3xl"
         style={{ background: 'var(--primary)' }}
       />
       <div
-        className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full pointer-events-none opacity-10 blur-3xl"
+        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full pointer-events-none opacity-5 blur-3xl"
         style={{ background: 'var(--accent)' }}
       />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-          {/* Brand Section */}
-          <div className="md:col-span-5 space-y-6">
-            <Link to="/" className="inline-flex items-center gap-4 group">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Footer Content */}
+        <div className="py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+          {/* Brand Column */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link to="/" className="inline-flex items-center gap-3 group">
               <motion.div
-                className="relative w-14 h-14 rounded-2xl overflow-hidden"
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                style={{
-                  boxShadow:
-                    '0 0 20px rgba(var(--primary-rgb, 99, 102, 241), 0.3)',
-                }}
+                className="w-12 h-12 rounded-xl overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                style={{ boxShadow: '0 0 25px rgba(99, 102, 241, 0.3)' }}
               >
-                <img
-                  src="/icon.png"
-                  alt={siteConfig.metadata.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                {/* Shine effect */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background:
-                      'linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%)',
-                  }}
-                />
+                <img src="/icon.png" alt={siteConfig.metadata.title} className="w-full h-full object-cover" />
               </motion.div>
               <div>
-                <span
-                  className="text-xl font-bold block"
-                  style={{
-                    color: 'var(--foreground)',
-                    fontFamily: 'var(--font-display)',
-                  }}
-                >
+                <span className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>
                   {siteConfig.metadata.title}
                 </span>
-                <span
-                  className="text-xs font-medium"
-                  style={{
-                    color: 'var(--primary)',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                >
-                  Bio Link Platform
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className="text-[10px] font-semibold px-1.5 py-0.5 rounded"
+                    style={{ background: 'var(--primary)', color: 'white' }}
+                  >
+                    BETA
+                  </span>
+                  <span className="text-xs" style={{ color: 'var(--foreground-muted)' }}>
+                    Bio Link Platform
+                  </span>
+                </div>
               </div>
             </Link>
 
-            <p
-              className="text-sm leading-relaxed max-w-sm"
-              style={{
-                color: 'var(--foreground-muted)',
-                fontFamily: 'var(--font-body)',
-              }}
-            >
-              {siteConfig.metadata.description}
+            <p className="text-sm leading-relaxed max-w-sm" style={{ color: 'var(--foreground-muted)' }}>
+              Create your personalized bio link page and share everything you create with a single link.
+              Free to start, powerful to grow.
             </p>
 
-            {/* Social Links with glow */}
-            <div className="flex flex-wrap gap-3 pt-2">
-              {siteConfig.owner.socialLinks.map((social, index) => {
+            {/* Feature Pills */}
+            <div className="flex flex-wrap gap-2">
+              {features.map((feature) => (
+                <div
+                  key={feature.label}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                  style={{
+                    background: 'rgba(99, 102, 241, 0.1)',
+                    color: 'var(--primary)',
+                    border: '1px solid rgba(99, 102, 241, 0.2)',
+                  }}
+                >
+                  <feature.icon size={12} />
+                  {feature.label}
+                </div>
+              ))}
+            </div>
+
+            {/* Social Links */}
+            <div className="flex flex-wrap gap-2 pt-2">
+              {siteConfig.owner.socialLinks.slice(0, 5).map((social) => {
                 const Icon = iconMap[social.icon.toLowerCase()] || LuGlobe
                 return (
                   <motion.a
@@ -126,161 +153,177 @@ export function Footer() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative p-3 rounded-xl transition-all duration-300"
+                    className="p-2.5 rounded-xl transition-all"
                     style={{
-                      backgroundColor: 'var(--background)',
+                      background: 'var(--background)',
                       border: '1px solid var(--border)',
                       color: 'var(--foreground-muted)',
                     }}
-                    whileHover={{
-                      scale: 1.1,
-                      y: -3,
-                    }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ scale: 1.1, y: -2 }}
                     aria-label={social.platform}
-                    title={social.platform}
                   >
-                    {/* Glow effect on hover */}
-                    <div
-                      className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-md"
-                      style={{ background: 'var(--primary)' }}
-                    />
-                    <Icon size={20} />
+                    <Icon size={18} />
                   </motion.a>
                 )
               })}
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="md:col-span-3 space-y-5">
-            <h3
-              className="text-sm font-bold uppercase tracking-widest flex items-center gap-2"
-              style={{
-                color: 'var(--foreground)',
-                fontFamily: 'var(--font-display)',
-              }}
-            >
-              <Sparkles size={14} style={{ color: 'var(--primary)' }} />
-              Quick Links
-            </h3>
-            <nav className="flex flex-col gap-3">
-              {siteConfig.footerLinks.map((link, index) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    to={link.href}
-                    className="group inline-flex items-center gap-2 text-sm transition-all duration-200"
-                    style={{
-                      color: 'var(--foreground-muted)',
-                      fontFamily: 'var(--font-body)',
-                    }}
-                  >
-                    <ChevronRight
-                      size={14}
-                      className="transition-transform duration-200 group-hover:translate-x-1"
-                      style={{ color: 'var(--primary)' }}
-                    />
-                    <span className="group-hover:text-[var(--primary)] transition-colors duration-200">
+          {/* Links Columns */}
+          <div className="lg:col-span-5 grid grid-cols-3 gap-8">
+            {/* Product */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
+                Product
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.product.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="text-sm transition-colors hover:text-[var(--primary)]"
+                      style={{ color: 'var(--foreground-muted)' }}
+                    >
                       {link.label}
-                    </span>
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
+                Resources
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.resources.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="text-sm transition-colors hover:text-[var(--primary)]"
+                      style={{ color: 'var(--foreground-muted)' }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
+                Company
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.company.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="text-sm transition-colors hover:text-[var(--primary)]"
+                      style={{ color: 'var(--foreground-muted)' }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Get Started Section */}
-          <div className="md:col-span-4 space-y-5">
-            <h3
-              className="text-sm font-bold uppercase tracking-widest flex items-center gap-2"
+          {/* CTA Column */}
+          <div className="lg:col-span-3 space-y-6">
+            <div
+              className="p-6 rounded-2xl"
               style={{
-                color: 'var(--foreground)',
-                fontFamily: 'var(--font-display)',
+                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))',
+                border: '1px solid rgba(99, 102, 241, 0.2)',
               }}
             >
-              <Sparkles size={14} style={{ color: 'var(--primary)' }} />
-              Get Started
-            </h3>
-            <p
-              className="text-sm"
-              style={{
-                color: 'var(--foreground-muted)',
-                fontFamily: 'var(--font-body)',
-              }}
-            >
-              Create your own bio page and share all your links with a single URL.
-              It's free to get started!
-            </p>
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))' }}
+                >
+                  <Sparkles size={20} style={{ color: 'white' }} />
+                </div>
+                <div>
+                  <h4 className="font-semibold" style={{ color: 'var(--foreground)' }}>
+                    Get Started Free
+                  </h4>
+                  <p className="text-xs" style={{ color: 'var(--foreground-muted)' }}>
+                    No credit card required
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/sign-up"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02]"
+                style={{
+                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                  color: 'white',
+                  boxShadow: '0 4px 20px rgba(99, 102, 241, 0.3)',
+                }}
+              >
+                Create Your Page
+                <ArrowUpRight size={16} />
+              </Link>
+            </div>
 
-            <Link
-              to="/sign-up"
-              className="group inline-flex items-center gap-3 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5"
-              style={{
-                background:
-                  'linear-gradient(135deg, var(--primary), var(--accent))',
-                color: 'var(--primary-foreground)',
-                fontFamily: 'var(--font-body)',
-                boxShadow:
-                  '0 4px 20px rgba(var(--primary-rgb, 99, 102, 241), 0.3)',
-              }}
-            >
-              <Sparkles size={18} />
-              Create Your Page
-              <ArrowUpRight
-                size={16}
-                className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200"
-              />
-            </Link>
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--foreground-muted)' }}>
+                <Mail size={14} style={{ color: 'var(--primary)' }} />
+                <span>contact@eziox.link</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--foreground-muted)' }}>
+                <Globe size={14} style={{ color: 'var(--primary)' }} />
+                <span>eziox.link</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--foreground-muted)' }}>
+                <MapPin size={14} style={{ color: 'var(--primary)' }} />
+                <span>Worldwide</span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div
-          className="mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="py-6 flex flex-col md:flex-row items-center justify-between gap-4"
           style={{ borderTop: '1px solid var(--border)' }}
         >
-          <p
-            className="text-sm flex items-center gap-1"
-            style={{
-              color: 'var(--foreground-muted)',
-              fontFamily: 'var(--font-body)',
-            }}
-          >
-            {siteConfig.metadata.copyright.replace(
-              new Date().getFullYear().toString(),
-              currentYear.toString(),
-            )}{' '}
-            {siteConfig.owner.name}
-          </p>
-          <p
-            className="text-xs flex items-center gap-1.5"
-            style={{
-              color: 'var(--foreground-muted)',
-              fontFamily: 'var(--font-body)',
-            }}
-          >
-            Built with
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs" style={{ color: 'var(--foreground-muted)' }}>
+            <span>© {currentYear} {siteConfig.metadata.title}. All rights reserved.</span>
+            <span className="hidden md:inline">•</span>
+            <Link to="/about" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</Link>
+            <span className="hidden md:inline">•</span>
+            <Link to="/about" className="hover:text-[var(--primary)] transition-colors">Terms of Service</Link>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--foreground-muted)' }}>
+            <span>Made with</span>
             <motion.span
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
             >
-              <Heart
-                size={12}
-                fill="var(--primary)"
-                style={{ color: 'var(--primary)' }}
-              />
+              <Heart size={12} fill="var(--primary)" style={{ color: 'var(--primary)' }} />
             </motion.span>
-            and
-            <Sparkles size={12} style={{ color: 'var(--accent)' }} />
-            creativity
-          </p>
+            <span>by</span>
+            <a
+              href="https://github.com/XSaitoKungX"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium hover:text-[var(--primary)] transition-colors"
+            >
+              Saito
+            </a>
+            <span className="flex items-center gap-1">
+              <Zap size={12} style={{ color: 'var(--accent)' }} />
+              Powered by React & TanStack
+            </span>
+          </div>
         </div>
       </div>
     </footer>

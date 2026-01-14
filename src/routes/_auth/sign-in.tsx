@@ -24,7 +24,9 @@ import {
   Zap,
   AlertCircle,
   Loader2,
-  ArrowLeft,
+  Users,
+  TrendingUp,
+  Globe,
 } from 'lucide-react'
 
 const searchSchema = z.object({
@@ -42,6 +44,12 @@ const signInSchema = z.object({
 })
 
 type SignInFormData = z.infer<typeof signInSchema>
+
+const testimonials = [
+  { name: 'Alex K.', role: 'Content Creator', text: 'Eziox made sharing my content so much easier!' },
+  { name: 'Sarah M.', role: 'Influencer', text: 'The analytics are incredible. I love seeing my growth.' },
+  { name: 'Mike R.', role: 'Developer', text: 'Clean, fast, and exactly what I needed.' },
+]
 
 function SignInPage() {
   const search = useSearch({ from: '/_auth/sign-in' })
@@ -82,106 +90,183 @@ function SignInPage() {
   const onSubmit = form.handleSubmit((data) => signInMutation.mutate(data))
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Back to Home Button */}
-      <Link
-        to="/"
-        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 group"
-        style={{
-          background: 'var(--background-secondary)',
-          border: '1px solid var(--border)',
-          color: 'var(--foreground)',
-        }}
-      >
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        Back to Home
-      </Link>
-
-      {/* Animated background */}
-      <div className="absolute inset-0 -z-10">
+    <div className="min-h-[calc(100vh-80px)] flex">
+      {/* Left Side - Branding & Social Proof */}
+      <div className="hidden lg:flex lg:w-1/2 xl:w-[55%] relative overflow-hidden">
+        {/* Gradient Background */}
         <div
           className="absolute inset-0"
-          style={{ background: 'var(--background)' }}
-        />
-        <motion.div
-          className="absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20"
-          style={{ background: 'var(--primary)' }}
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
+          style={{
+            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05))',
           }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
+        
+        {/* Animated Orbs */}
         <motion.div
-          className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20"
+          className="absolute top-20 right-20 w-72 h-72 rounded-full blur-3xl opacity-30"
           style={{ background: 'var(--accent)' }}
-          animate={{
-            scale: [1.2, 1, 1.2],
-            x: [0, -50, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ scale: [1, 1.2, 1], x: [0, -30, 0], y: [0, 20, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
         />
+        <motion.div
+          className="absolute bottom-20 left-20 w-96 h-96 rounded-full blur-3xl opacity-20"
+          style={{ background: 'var(--primary)' }}
+          animate={{ scale: [1.2, 1, 1.2], x: [0, 40, 0], y: [0, -30, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20 py-12">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12"
+          >
+            <Link to="/" className="inline-flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl overflow-hidden"
+                style={{ boxShadow: '0 0 30px rgba(139, 92, 246, 0.4)' }}
+              >
+                <img src="/icon.png" alt="Eziox" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <span className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>Eziox</span>
+                <span className="block text-xs" style={{ color: 'var(--accent)' }}>Bio Link Platform</span>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-12"
+          >
+            <h1
+              className="text-4xl xl:text-5xl font-black mb-4 leading-tight"
+              style={{ color: 'var(--foreground)' }}
+            >
+              Welcome back,
+              <br />
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, var(--accent), var(--primary))',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                creator
+              </span>
+            </h1>
+            <p className="text-lg" style={{ color: 'var(--foreground-muted)' }}>
+              Your audience is waiting. Let's get you back to your dashboard.
+            </p>
+          </motion.div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 mb-12">
+            {[
+              { icon: Users, value: '10K+', label: 'Creators' },
+              { icon: TrendingUp, value: '1M+', label: 'Link Clicks' },
+              { icon: Globe, value: '150+', label: 'Countries' },
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.1 }}
+                className="p-4 rounded-2xl text-center backdrop-blur-sm"
+                style={{
+                  background: 'rgba(var(--card-rgb, 20, 20, 30), 0.5)',
+                  border: '1px solid rgba(var(--border-rgb, 255, 255, 255), 0.1)',
+                }}
+              >
+                <stat.icon size={24} className="mx-auto mb-2" style={{ color: 'var(--accent)' }} />
+                <div className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>{stat.value}</div>
+                <div className="text-xs" style={{ color: 'var(--foreground-muted)' }}>{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Testimonials */}
+          <div className="space-y-4">
+            <p className="text-sm font-medium" style={{ color: 'var(--foreground-muted)' }}>
+              What creators say
+            </p>
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + index * 0.1 }}
+                className="p-4 rounded-2xl backdrop-blur-sm"
+                style={{
+                  background: 'rgba(var(--card-rgb, 20, 20, 30), 0.5)',
+                  border: '1px solid rgba(var(--border-rgb, 255, 255, 255), 0.1)',
+                }}
+              >
+                <p className="text-sm mb-2" style={{ color: 'var(--foreground)' }}>
+                  "{testimonial.text}"
+                </p>
+                <p className="text-xs" style={{ color: 'var(--foreground-muted)' }}>
+                  <span className="font-medium">{testimonial.name}</span> · {testimonial.role}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-md"
-      >
-        {/* Glass card */}
-        <div
-          className="relative rounded-3xl p-8 backdrop-blur-xl"
-          style={{
-            background: 'rgba(var(--card-rgb, 20, 20, 30), 0.8)',
-            border: '1px solid rgba(var(--border-rgb, 255, 255, 255), 0.1)',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-          }}
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-1/2 xl:w-[45%] flex items-center justify-center p-6 lg:p-12">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
         >
-          {/* Gradient border effect */}
-          <div
-            className="absolute inset-0 rounded-3xl -z-10 opacity-50"
-            style={{
-              background:
-                'linear-gradient(135deg, var(--primary), var(--accent))',
-              padding: '1px',
-              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-              maskComposite: 'exclude',
-            }}
-          />
+          {/* Mobile Logo */}
+          <div className="lg:hidden mb-8 text-center">
+            <Link to="/" className="inline-flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl overflow-hidden">
+                <img src="/icon.png" alt="Eziox" className="w-full h-full object-cover" />
+              </div>
+              <span className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>Eziox</span>
+            </Link>
+          </div>
 
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="mb-8">
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
               style={{
-                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                boxShadow: '0 10px 40px rgba(var(--primary-rgb, 99, 102, 241), 0.4)',
+                background: 'rgba(139, 92, 246, 0.1)',
+                border: '1px solid rgba(139, 92, 246, 0.2)',
               }}
             >
-              <Shield className="w-8 h-8 text-white" />
+              <Shield size={14} style={{ color: 'var(--accent)' }} />
+              <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
+                Secure Login
+              </span>
             </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-2xl font-bold mb-2"
-              style={{ color: 'var(--foreground)', fontFamily: 'var(--font-display)' }}
-            >
-              Welcome Back
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-sm"
-              style={{ color: 'var(--foreground-muted)' }}
-            >
-              Sign in to continue your journey
-            </motion.p>
+            <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
+              Sign in to your account
+            </h2>
+            <p style={{ color: 'var(--foreground-muted)' }}>
+              Don't have an account?{' '}
+              <Link
+                to="/sign-up"
+                search={search.redirect ? { redirect: search.redirect } : undefined}
+                className="font-medium hover:underline"
+                style={{ color: 'var(--primary)' }}
+              >
+                Sign up free
+              </Link>
+            </p>
           </div>
 
           {/* Error message */}
@@ -198,9 +283,7 @@ function SignInPage() {
                 }}
               >
                 <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
-                <p className="text-sm text-red-400">
-                  {form.formState.errors.root.message}
-                </p>
+                <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -208,153 +291,112 @@ function SignInPage() {
           {/* Form */}
           <form onSubmit={onSubmit} className="space-y-5">
             {/* Email field */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <label
-                className="block text-sm font-medium mb-2"
-                style={{ color: 'var(--foreground-muted)' }}
-              >
-                Email
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
+                Email Address
               </label>
               <div
-                className="relative group"
+                className="relative"
                 onFocus={() => setFocusedField('email')}
                 onBlur={() => setFocusedField(null)}
               >
-                <div
-                  className="absolute inset-0 rounded-xl transition-opacity duration-300 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                    opacity: focusedField === 'email' ? 0.2 : 0,
-                  }}
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors"
+                  style={{ color: focusedField === 'email' ? 'var(--primary)' : 'var(--foreground-muted)' }}
                 />
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <Mail
-                    className="w-5 h-5 transition-colors duration-300"
-                    style={{
-                      color: focusedField === 'email' ? 'var(--primary)' : 'var(--foreground-muted)',
-                    }}
-                  />
-                </div>
                 <input
                   {...form.register('email')}
                   type="email"
                   placeholder="you@example.com"
-                  className="w-full pl-12 pr-4 py-3.5 rounded-xl outline-none transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl outline-none transition-all"
                   style={{
                     background: 'var(--background-secondary)',
-                    border: `1px solid ${form.formState.errors.email ? 'rgba(239, 68, 68, 0.5)' : focusedField === 'email' ? 'var(--primary)' : 'var(--border)'}`,
+                    border: `2px solid ${form.formState.errors.email ? 'rgba(239, 68, 68, 0.5)' : focusedField === 'email' ? 'var(--primary)' : 'var(--border)'}`,
                     color: 'var(--foreground)',
                   }}
                 />
               </div>
               {form.formState.errors.email && (
-                <p className="mt-2 text-sm text-red-400">
-                  {form.formState.errors.email.message}
-                </p>
+                <p className="mt-1.5 text-xs text-red-400">{form.formState.errors.email.message}</p>
               )}
-            </motion.div>
+            </div>
 
             {/* Password field */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <label
-                className="block text-sm font-medium mb-2"
-                style={{ color: 'var(--foreground-muted)' }}
-              >
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground)' }}>
                 Password
               </label>
               <div
-                className="relative group"
+                className="relative"
                 onFocus={() => setFocusedField('password')}
                 onBlur={() => setFocusedField(null)}
               >
-                <div
-                  className="absolute inset-0 rounded-xl transition-opacity duration-300 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                    opacity: focusedField === 'password' ? 0.2 : 0,
-                  }}
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors"
+                  style={{ color: focusedField === 'password' ? 'var(--primary)' : 'var(--foreground-muted)' }}
                 />
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <Lock
-                    className="w-5 h-5 transition-colors duration-300"
-                    style={{
-                      color: focusedField === 'password' ? 'var(--primary)' : 'var(--foreground-muted)',
-                    }}
-                  />
-                </div>
                 <input
                   {...form.register('password')}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-12 py-3.5 rounded-xl outline-none transition-all duration-300"
+                  className="w-full pl-12 pr-12 py-4 rounded-xl outline-none transition-all"
                   style={{
                     background: 'var(--background-secondary)',
-                    border: `1px solid ${form.formState.errors.password ? 'rgba(239, 68, 68, 0.5)' : focusedField === 'password' ? 'var(--primary)' : 'var(--border)'}`,
+                    border: `2px solid ${form.formState.errors.password ? 'rgba(239, 68, 68, 0.5)' : focusedField === 'password' ? 'var(--primary)' : 'var(--border)'}`,
                     color: 'var(--foreground)',
                   }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-colors hover:bg-white/10"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1"
                   style={{ color: 'var(--foreground-muted)' }}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
               {form.formState.errors.password && (
-                <p className="mt-2 text-sm text-red-400">
-                  {form.formState.errors.password.message}
-                </p>
+                <p className="mt-1.5 text-xs text-red-400">{form.formState.errors.password.message}</p>
               )}
-            </motion.div>
+            </div>
+
+            {/* Forgot password link */}
+            <div className="flex justify-end">
+              <a
+                href="#"
+                className="text-sm font-medium hover:underline"
+                style={{ color: 'var(--primary)' }}
+              >
+                Forgot password?
+              </a>
+            </div>
 
             {/* Submit button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
+            <motion.button
+              type="submit"
+              disabled={signInMutation.isPending}
+              className="w-full py-4 rounded-xl font-semibold text-white relative overflow-hidden group disabled:opacity-70"
+              style={{
+                background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+                boxShadow: '0 10px 40px rgba(99, 102, 241, 0.3)',
+              }}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
             >
-              <motion.button
-                type="submit"
-                disabled={signInMutation.isPending}
-                className="w-full py-4 rounded-xl font-semibold text-white relative overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed"
-                style={{
-                  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-                  boxShadow: '0 10px 40px rgba(var(--primary-rgb, 99, 102, 241), 0.3)',
-                }}
-                whileHover={{ scale: 1.02, boxShadow: '0 15px 50px rgba(var(--primary-rgb, 99, 102, 241), 0.4)' }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  {signInMutation.isPending ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Signing in...
-                    </>
-                  ) : (
-                    <>
-                      Sign In
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
-                </span>
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: 'linear-gradient(135deg, var(--accent), var(--primary))',
-                  }}
-                />
-              </motion.button>
-            </motion.div>
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                {signInMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    Sign In
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </span>
+            </motion.button>
           </form>
 
           {/* Divider */}
@@ -362,58 +404,42 @@ function SignInPage() {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t" style={{ borderColor: 'var(--border)' }} />
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span
-                className="px-4"
-                style={{ background: 'var(--card)', color: 'var(--foreground-muted)' }}
-              >
-                New here?
+            <div className="relative flex justify-center">
+              <span className="px-4 text-sm" style={{ background: 'var(--background)', color: 'var(--foreground-muted)' }}>
+                New to Eziox?
               </span>
             </div>
           </div>
 
-          {/* Sign up link */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-center"
+          {/* Sign up CTA */}
+          <Link
+            to="/sign-up"
+            search={search.redirect ? { redirect: search.redirect } : undefined}
+            className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all hover:scale-[1.01]"
+            style={{
+              background: 'var(--background-secondary)',
+              border: '2px solid var(--border)',
+              color: 'var(--foreground)',
+            }}
           >
-            <Link
-              to="/sign-up"
-              search={search.redirect ? { redirect: search.redirect } : undefined}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 group"
-              style={{
-                background: 'var(--background-secondary)',
-                border: '1px solid var(--border)',
-                color: 'var(--foreground)',
-              }}
-            >
-              <Sparkles className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-              Create an account
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--primary)' }} />
-            </Link>
-          </motion.div>
+            <Sparkles size={18} style={{ color: 'var(--primary)' }} />
+            Create your free account
+            <ArrowRight size={18} style={{ color: 'var(--primary)' }} />
+          </Link>
 
-          {/* Features */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="mt-8 pt-6 border-t grid grid-cols-2 gap-4"
-            style={{ borderColor: 'var(--border)' }}
-          >
+          {/* Trust badges */}
+          <div className="mt-8 pt-6 border-t flex flex-wrap items-center justify-center gap-6" style={{ borderColor: 'var(--border)' }}>
             <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--foreground-muted)' }}>
-              <Shield className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-              Secure login
+              <Shield size={16} style={{ color: 'var(--primary)' }} />
+              <span>256-bit Encryption</span>
             </div>
             <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--foreground-muted)' }}>
-              <Zap className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-              Fast access
+              <Zap size={16} style={{ color: 'var(--accent)' }} />
+              <span>Instant Access</span>
             </div>
-          </motion.div>
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
 }
