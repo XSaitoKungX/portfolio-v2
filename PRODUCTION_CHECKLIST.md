@@ -1,113 +1,130 @@
-# 🚀 Production Deployment Checklist
+# 🚀 Eziox Production Deployment Checklist
 
-**Live Site**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)  
-**Architecture**: Vercel (Frontend) + Appwrite (Backend)
+**Live Site**: [eziox.link](https://eziox.link)  
+**Architecture**: Vercel (Frontend) + Neon PostgreSQL (Database)
 
 ## ✅ Pre-Deployment
 
 ### Code Quality
 
-- [x] All TypeScript errors resolved (`bun run build`) ✅ Build successful
-- [x] Linting passes (`bun run lint`) ✅ No errors (added .vercel to ignores)
-- [x] Code formatted (`bun run format`) ✅ All files formatted
-- [x] No console.log statements in production code ✅ Only console.error for error handling (best practice)
-- [x] All TODO comments addressed ✅ No TODO/FIXME comments found
+- [ ] All TypeScript errors resolved (`bun run build`)
+- [ ] Linting passes (`bun run lint`)
+- [ ] Code formatted (`bun run format`)
+- [ ] No console.log statements in production code
+- [ ] All TODO comments addressed
 
 ### Configuration
 
-- [x] `.env.production` configured with production values ✅ Confirmed by user
-- [x] `VITE_APPWRITE_ENDPOINT` set correctly ✅ Confirmed by user
-- [x] `VITE_APPWRITE_PROJECT_ID` matches Appwrite project ✅ Confirmed by user
-- [x] `APPWRITE_API_KEY` has necessary permissions ✅ Confirmed by user
-- [x] All sensitive data in environment variables (not hardcoded) ✅ Confirmed by user
+- [ ] `.env` configured with production values
+- [ ] `DATABASE_URL` set to Neon connection string
+- [ ] `AUTH_SECRET` generated securely (`openssl rand -base64 32`)
+- [ ] `VITE_OWNER_EMAIL` set to admin email
+- [ ] All sensitive data in environment variables (not hardcoded)
 
 ### Content
 
-- [x] Blog posts reviewed and published ✅ 9 posts with complete metadata (title, excerpt, publishDate, category, tags)
-- [x] All images optimized (WebP format preferred) ✅ Converted to WebP (~50% size reduction: 111-180KB)
-- [x] Site metadata updated in `site-config.ts` ✅ URL updated to portfolio.novaplex.xyz
-- [x] Social media links verified ✅ GitHub, Website, Astra Bot links present
-- [x] Contact information current ✅ Email: saito@novaplex.xyz
+- [ ] Blog posts reviewed and published
+- [ ] All images optimized (WebP format preferred)
+- [ ] Site metadata updated in `site-config.ts` (title: Eziox, url: eziox.link)
+- [ ] Social media links verified
+- [ ] Contact information current
 
 ### Performance
 
-- [x] Build size acceptable (`bun run build` - check output) ✅ Client: ~250KB gzip, Server: ~1.89MB gzip
-- [x] Images lazy-loaded ✅ 5 locations with `loading="lazy"`
-- [x] Code splitting configured ✅ manualChunks for react-vendor, tanstack-vendor, ui-vendor
-- [x] Unused dependencies removed ✅ Only `date-fns` unused (can be removed later)
-- [x] Bundle analyzed for optimization opportunities ✅ React vendor is largest chunk (206KB gzip)
+- [ ] Build size acceptable (`bun run build` - check output)
+- [ ] Images lazy-loaded
+- [ ] Code splitting configured
+- [ ] Unused dependencies removed
+- [ ] Bundle analyzed for optimization opportunities
 
-## 🔧 Appwrite Backend
+## 🐘 Neon Database
 
-### Database
+### Setup
 
-- [x] Collections created (`blog-posts`, `projects`) ✅ Defined in appwrite.json
-- [x] Indexes configured correctly ✅ slug_index (unique), published_index, publishedAt_index, featured_index, order_index
-- [x] Permissions set to `read("any")` for public collections ✅ Set in Appwrite Dashboard
-- [x] Test data added (if needed) ✅ Blog posts loaded from local JSON (9 posts), Appwrite collections ready for future use
+- [ ] Neon project created at [console.neon.tech](https://console.neon.tech)
+- [ ] Connection string copied to `DATABASE_URL`
+- [ ] Region selected close to Vercel deployment
 
-### Storage
+### Schema
 
-- [x] `portfolio-images` bucket created ✅ Defined in appwrite.json
-- [x] Bucket permissions set correctly ⚠️ Set in Appwrite Dashboard
-- [x] File size limits configured ✅ 10MB max
-- [x] Allowed file extensions set ✅ jpg, jpeg, png, gif, webp, svg, ico, pdf, doc, docx, txt, md
+- [ ] Database schema pushed (`bun run db:push`)
+- [ ] All tables created:
+  - [ ] `users` - User accounts
+  - [ ] `profiles` - Bio, avatar, banner, location
+  - [ ] `sessions` - Auth sessions
+  - [ ] `user_links` - Linktree-style links
+  - [ ] `user_stats` - Views, clicks, score
+  - [ ] `follows` - Follower relationships
+  - [ ] `blog_posts` - Blog articles
+  - [ ] `projects` - Portfolio projects
+  - [ ] `activity_log` - Activity tracking
 
 ### Authentication
 
-- [x] Auth methods enabled (Email/Password) ✅ Fully implemented in `src/server/functions/auth.ts`
-- [x] Password requirements configured ✅ Min 8 characters (Zod validation)
-- [x] Session duration set appropriately ✅ HttpOnly secure cookies with session management
-- [x] Sign In / Sign Up / Sign Out pages ✅ Complete UI with form validation
-- [x] Protected routes with redirect ✅ `_protected.tsx` layout with auth middleware
-- [x] `useAuth` hook for client-side auth state ✅ Access to currentUser and signOut
-- [ ] Email templates customized (optional) - Set in Appwrite Dashboard
-- [ ] External OAuth: Discord, GitHub, Steam etc. (optional)
+- [ ] Session-based auth working
+- [ ] Password hashing with bcrypt
+- [ ] Secure cookies (httpOnly, secure, sameSite)
+- [ ] Sign In / Sign Up / Sign Out pages
+- [ ] Protected routes with redirect
+- [ ] `useAuth` hook for client-side auth state
+- [ ] Owner role assigned to `VITE_OWNER_EMAIL`
 
 ## 🌐 Vercel Deployment (Frontend)
 
 ### Initial Setup
 
-- [x] Vercel account created
-- [x] GitHub repository connected: `XSaitoKungX/portfolio-v2`
-- [x] Project imported to Vercel
-- [x] Auto-deployment configured
+- [ ] Vercel account created
+- [ ] GitHub repository connected
+- [ ] Project imported to Vercel
+- [ ] Auto-deployment configured
 
 ### Build Configuration
 
-- [x] TanStack Start auto-detected
-- [x] Build Command: `bun run build`
-- [x] Nitro generates `.vercel/output/` automatically
-- [x] Install Command: `bun install`
+- [ ] TanStack Start auto-detected
+- [ ] Build Command: `bun run build`
+- [ ] Nitro generates `.vercel/output/` automatically
+- [ ] Install Command: `bun install`
 
 ### Environment Variables
 
-- [x] `VITE_APPWRITE_ENDPOINT` = `https://cloud.appwrite.io/v1`
-- [x] `VITE_APPWRITE_PROJECT_ID` = `696615c200386f6d3ba3`
-- [ ] `APPWRITE_API_KEY` (optional, for server-side operations)
-- [x] All variables applied to Production, Preview, Development
+- [ ] `DATABASE_URL` - Neon connection string
+- [ ] `AUTH_SECRET` - Secure random string
+- [ ] `VITE_OWNER_EMAIL` - Admin email
+- [ ] `NODE_ENV=production`
+- [ ] All variables applied to Production, Preview, Development
 
 ### Domain & SSL
 
-- [x] Custom domain configured: `portfolio.novaplex.xyz`
-- [x] SSL certificate active (automatic via Vercel)
-- [x] DNS records propagated
-- [x] HTTPS enforced
+- [ ] Custom domain configured: `eziox.link`
+- [ ] SSL certificate active (automatic via Vercel)
+- [ ] DNS records propagated
+- [ ] HTTPS enforced
 
 ## 🧪 Post-Deployment Testing
 
-**Test URL**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
+**Test URL**: [eziox.link](https://eziox.link)
 
 ### Functionality
 
-- [x] Homepage loads correctly
-- [x] Blog posts display properly
-- [x] Navigation works on all pages
-- [x] Theme switcher functional
-- [x] RSS feed accessible at `/rss`
-- [x] Sitemap accessible at `/sitemap`
-- [x] 404 page displays correctly
-- [x] Appwrite data fetching works
+- [ ] Homepage loads correctly
+- [ ] Blog posts display properly
+- [ ] Navigation works on all pages
+- [ ] Theme switcher functional
+- [ ] RSS feed accessible at `/rss`
+- [ ] Sitemap accessible at `/sitemap`
+- [ ] 404 page displays correctly
+- [ ] Database connection working
+
+### User System
+
+- [ ] Sign up creates new user
+- [ ] Sign in authenticates correctly
+- [ ] Sign out clears session
+- [ ] Profile page loads user data
+- [ ] Public profile at `/u/username` works
+- [ ] Leaderboard at `/leaderboard` works
+- [ ] Bio links can be created/edited/deleted
+- [ ] Click tracking increments stats
 
 ### Performance
 
@@ -115,7 +132,7 @@
 - [ ] First Contentful Paint < 1.5s
 - [ ] Time to Interactive < 3.5s
 - [ ] Cumulative Layout Shift < 0.1
-- [ ] Images loading efficiently from Appwrite Storage
+- [ ] Database queries optimized
 
 ### SEO
 
@@ -144,21 +161,23 @@
 
 ### Backend Integration
 
-- [x] Appwrite database connection working
-- [x] Blog posts loading from Appwrite
-- [x] Projects loading from Appwrite
-- [x] Images loading from Appwrite Storage
-- [ ] Authentication flow working (if enabled)
+- [ ] Neon database connection working
+- [ ] User authentication working
+- [ ] Profile data loading correctly
+- [ ] Bio links CRUD operations working
+- [ ] Stats tracking (views, clicks) working
+- [ ] Leaderboard sorting correctly
 
 ## 🔒 Security
 
 ### Best Practices
 
 - [ ] HTTPS enforced
-- [ ] API keys not exposed in client code
-- [ ] CORS configured correctly in Appwrite
+- [ ] `AUTH_SECRET` not exposed in client code
+- [ ] `DATABASE_URL` only on server-side
+- [ ] Passwords hashed with bcrypt
+- [ ] Session cookies are httpOnly and secure
 - [ ] Content Security Policy headers set
-- [ ] XSS protection enabled
 
 ### Monitoring
 
@@ -222,9 +241,9 @@ If issues arise post-deployment:
    vercel rollback
    ```
 
-2. **Database**: Restore from Appwrite backup (if needed)
+2. **Database**: Check Neon dashboard for issues
 
-3. **Investigate**: Check Vercel logs and Appwrite console
+3. **Investigate**: Check Vercel logs and Neon console
 
 4. **Fix**: Address issues in development
 
@@ -232,5 +251,5 @@ If issues arise post-deployment:
 
 ---
 
-**Last Updated**: 2026-01-13
+**Last Updated**: 2026-01-14
 **Next Review**: Before each major deployment

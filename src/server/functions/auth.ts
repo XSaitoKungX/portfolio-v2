@@ -1,18 +1,29 @@
 /**
- * Modern Authentication System
- * Secure, type-safe authentication with Appwrite
+ * New Authentication Server Functions
+ * Replaces Appwrite auth with Neon PostgreSQL + custom sessions
  */
 
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { createAdminClient, createSessionClient } from '../lib/appwrite'
-import { AppwriteException, ID } from 'node-appwrite'
 import {
-  deleteCookie,
   getCookie,
   setCookie,
+  deleteCookie,
   setResponseStatus,
 } from '@tanstack/react-start/server'
+import {
+  createUser,
+  findUserByEmail,
+  findUserByUsername,
+  verifyPassword,
+  createSession,
+  validateSession,
+  deleteSession,
+  getUserWithProfile,
+  updateUser,
+  updateProfile,
+  updateLastActive,
+} from '../lib/auth'
 
 // ============================================================================
 // Validation Schemas
@@ -32,6 +43,12 @@ const passwordSchema = z
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/[0-9]/, 'Password must contain at least one number')
 
+const usernameSchema = z
+  .string()
+  .min(3, 'Username must be at least 3 characters')
+  .max(30, 'Username is too long')
+  .regex(/^[a-zA-Z0-9_-]+$/, 'Username can only contain letters, numbers, underscores, and hyphens')
+
 const nameSchema = z
   .string()
   .min(2, 'Name must be at least 2 characters')
@@ -41,18 +58,17 @@ const nameSchema = z
 const signUpSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
+  username: usernameSchema,
   name: nameSchema,
-  redirect: z.string().optional(),
 })
 
 const signInSchema = z.object({
   email: emailSchema,
   password: z.string().min(1, 'Password is required'),
-  redirect: z.string().optional(),
 })
 
 // ============================================================================
-// Session Management
+// Cookie Options
 // ============================================================================
 
 const COOKIE_OPTIONS = {
@@ -63,174 +79,197 @@ const COOKIE_OPTIONS = {
   maxAge: 60 * 60 * 24 * 30, // 30 days
 }
 
-export const getAppwriteSessionFn = createServerFn({ method: 'GET' }).handler(
+// ============================================================================
+// Session Functions
+// ============================================================================
+
+export const getSessionTokenFn = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const session = getCookie('appwrite-session-secret')
-    return session || null
+    const token = getCookie('session-token')
+    return token || null
   },
 )
 
-export const setAppwriteSessionCookiesFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ id: z.string(), secret: z.string() }))
-  .handler(async ({ data }) => {
-    const { id, secret } = data
-
-    setCookie('appwrite-session-secret', secret, COOKIE_OPTIONS)
-    setCookie('appwrite-session-id', id, COOKIE_OPTIONS)
-  })
-
-const clearSessionCookies = () => {
-  deleteCookie('appwrite-session-secret')
-  deleteCookie('appwrite-session-id')
-}
-
 // ============================================================================
-// Authentication Functions
+// Sign Up
 // ============================================================================
 
 export const signUpFn = createServerFn({ method: 'POST' })
   .inputValidator(signUpSchema)
   .handler(async ({ data }) => {
-    const { email, password, name } = data
-    const { account } = createAdminClient()
+    const { email, password, username, name } = data
 
     try {
-      // Create user account
-      await account.create({
-        userId: ID.unique(),
-        email,
-        password,
-        name: name || email.split('@')[0],
-      })
+      // Check if email already exists
+      const existingEmail = await findUserByEmail(email)
+      if (existingEmail) {
+        setResponseStatus(409)
+        throw { message: 'An account with this email already exists', status: 409 }
+      }
+
+      // Check if username already exists
+      const existingUsername = await findUserByUsername(username)
+      if (existingUsername) {
+        setResponseStatus(409)
+        throw { message: 'This username is already taken', status: 409 }
+      }
+
+      // Create user
+      const user = await createUser({ email, password, username, name })
 
       // Create session
-      const session = await account.createEmailPasswordSession({
-        email,
-        password,
-      })
+      const session = await createSession(user.id)
 
-      // Set session cookies
-      await setAppwriteSessionCookiesFn({
-        data: { id: session.$id, secret: session.secret },
-      })
+      // Set cookie
+      if (!session) {
+        throw { message: 'Failed to create session', status: 500 }
+      }
+      setCookie('session-token', session.token, COOKIE_OPTIONS)
 
       return { success: true, message: 'Account created successfully' }
-    } catch (_error) {
-      const error = _error as AppwriteException
-      setResponseStatus(error.code || 500)
-
-      // User-friendly error messages
-      const errorMessages: Record<number, string> = {
-        409: 'An account with this email already exists',
-        400: 'Invalid email or password format',
-        429: 'Too many attempts. Please try again later',
+    } catch (error) {
+      const err = error as { message?: string; status?: number }
+      if (err.status) {
+        throw error
       }
-
-      throw {
-        message: errorMessages[error.code] || error.message || 'Failed to create account',
-        status: error.code || 500,
-        code: error.type,
-      }
+      setResponseStatus(500)
+      throw { message: err.message || 'Failed to create account', status: 500 }
     }
   })
+
+// ============================================================================
+// Sign In
+// ============================================================================
 
 export const signInFn = createServerFn({ method: 'POST' })
   .inputValidator(signInSchema)
   .handler(async ({ data }) => {
     const { email, password } = data
-    const { account } = createAdminClient()
 
     try {
-      const session = await account.createEmailPasswordSession({
-        email,
-        password,
-      })
+      // Find user
+      const user = await findUserByEmail(email)
+      if (!user) {
+        setResponseStatus(401)
+        throw { message: 'Invalid email or password', status: 401 }
+      }
 
-      await setAppwriteSessionCookiesFn({
-        data: { id: session.$id, secret: session.secret },
-      })
+      // Verify password
+      const valid = await verifyPassword(password, user.passwordHash)
+      if (!valid) {
+        setResponseStatus(401)
+        throw { message: 'Invalid email or password', status: 401 }
+      }
+
+      // Create session
+      const session = await createSession(user.id)
+
+      // Set cookie
+      if (!session) {
+        throw { message: 'Failed to create session', status: 500 }
+      }
+      setCookie('session-token', session.token, COOKIE_OPTIONS)
+
+      // Update last active
+      await updateLastActive(user.id)
 
       return { success: true, message: 'Signed in successfully' }
-    } catch (_error) {
-      const error = _error as AppwriteException
-      setResponseStatus(error.code || 500)
-
-      // User-friendly error messages
-      const errorMessages: Record<number, string> = {
-        401: 'Invalid email or password',
-        404: 'No account found with this email',
-        429: 'Too many attempts. Please try again later',
+    } catch (error) {
+      const err = error as { message?: string; status?: number }
+      if (err.status) {
+        throw error
       }
-
-      throw {
-        message: errorMessages[error.code] || error.message || 'Failed to sign in',
-        status: error.code || 500,
-        code: error.type,
-      }
+      setResponseStatus(500)
+      throw { message: err.message || 'Failed to sign in', status: 500 }
     }
   })
 
+// ============================================================================
+// Sign Out
+// ============================================================================
+
 export const signOutFn = createServerFn({ method: 'POST' }).handler(async () => {
   try {
-    const session = await getAppwriteSessionFn()
+    const token = getCookie('session-token')
 
-    if (session) {
-      // Try to delete session from Appwrite
-      try {
-        const client = await createSessionClient(session)
-        await client.account.deleteSession('current')
-      } catch {
-        // Session might already be invalid, continue with cookie cleanup
-      }
+    if (token) {
+      await deleteSession(token)
     }
 
-    // Always clear cookies
-    clearSessionCookies()
+    deleteCookie('session-token')
 
     return { success: true, message: 'Signed out successfully' }
   } catch {
-    // Clear cookies even if there's an error
-    clearSessionCookies()
+    deleteCookie('session-token')
     return { success: true, message: 'Signed out' }
   }
 })
 
 // ============================================================================
-// User & Session Functions
+// Get Current User
 // ============================================================================
 
 export const getCurrentUser = createServerFn({ method: 'GET' }).handler(
   async () => {
     try {
-      const session = await getAppwriteSessionFn()
+      const token = getCookie('session-token')
 
-      if (!session) {
+      if (!token) {
         return null
       }
 
-      const client = await createSessionClient(session)
-      const user = await client.account.get()
+      const user = await validateSession(token)
+      if (!user) {
+        deleteCookie('session-token')
+        return null
+      }
+
+      // Get full profile
+      const userData = await getUserWithProfile(user.id)
+      if (!userData) {
+        return null
+      }
+
+      // Update last active
+      await updateLastActive(user.id)
 
       return {
-        $id: user.$id,
-        $createdAt: user.$createdAt,
-        email: user.email,
-        name: user.name,
-        emailVerification: user.emailVerification,
-        prefs: user.prefs,
-        labels: user.labels,
-        registration: user.$createdAt,
+        id: userData.user.id,
+        email: userData.user.email,
+        username: userData.user.username,
+        name: userData.user.name,
+        role: userData.user.role,
+        emailVerified: userData.user.emailVerified,
+        createdAt: userData.user.createdAt.toISOString(),
+        profile: userData.profile ? {
+          bio: userData.profile.bio,
+          avatar: userData.profile.avatar,
+          banner: userData.profile.banner,
+          location: userData.profile.location,
+          website: userData.profile.website,
+          pronouns: userData.profile.pronouns,
+          accentColor: userData.profile.accentColor,
+          badges: userData.profile.badges,
+          socials: userData.profile.socials,
+          isPublic: userData.profile.isPublic,
+        } : null,
+        stats: userData.stats ? {
+          profileViews: userData.stats.profileViews,
+          totalLinkClicks: userData.stats.totalLinkClicks,
+          followers: userData.stats.followers,
+          following: userData.stats.following,
+          score: userData.stats.score,
+        } : null,
       }
-    } catch (error) {
-      // Only clear cookies for specific auth errors, not network issues
-      const appwriteError = error as AppwriteException
-      if (appwriteError.code === 401 || appwriteError.type === 'user_unauthorized') {
-        clearSessionCookies()
-      }
+    } catch {
       return null
     }
   },
 )
+
+// ============================================================================
+// Auth Middleware
+// ============================================================================
 
 export const authMiddleware = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -240,34 +279,72 @@ export const authMiddleware = createServerFn({ method: 'GET' }).handler(
 )
 
 // ============================================================================
-// Profile Management
+// Update Profile
 // ============================================================================
 
 export const updateProfileFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ name: nameSchema }))
+  .inputValidator(
+    z.object({
+      name: nameSchema,
+      username: usernameSchema.optional(),
+      bio: z.string().max(500).optional(),
+      location: z.string().max(100).optional(),
+      website: z.string().url().optional().or(z.literal('')),
+      pronouns: z.string().max(50).optional(),
+      accentColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+      isPublic: z.boolean().optional(),
+    })
+  )
   .handler(async ({ data }) => {
-    const session = await getAppwriteSessionFn()
+    const token = getCookie('session-token')
 
-    if (!session) {
+    if (!token) {
+      setResponseStatus(401)
+      throw { message: 'Not authenticated', status: 401 }
+    }
+
+    const user = await validateSession(token)
+    if (!user) {
       setResponseStatus(401)
       throw { message: 'Not authenticated', status: 401 }
     }
 
     try {
-      const client = await createSessionClient(session)
+      // Update user fields
+      if (data.name || data.username) {
+        // Check if username is taken
+        if (data.username && data.username !== user.username) {
+          const existing = await findUserByUsername(data.username)
+          if (existing) {
+            setResponseStatus(409)
+            throw { message: 'Username is already taken', status: 409 }
+          }
+        }
 
-      if (data.name) {
-        await client.account.updateName(data.name)
+        await updateUser(user.id, {
+          name: data.name,
+          username: data.username,
+        })
       }
+
+      // Update profile fields
+      await updateProfile(user.id, {
+        bio: data.bio,
+        location: data.location,
+        website: data.website || undefined,
+        pronouns: data.pronouns,
+        accentColor: data.accentColor,
+        isPublic: data.isPublic,
+      })
 
       return { success: true, message: 'Profile updated successfully' }
-    } catch (_error) {
-      const error = _error as AppwriteException
-      setResponseStatus(error.code || 500)
-      throw {
-        message: error.message || 'Failed to update profile',
-        status: error.code || 500,
+    } catch (error) {
+      const err = error as { message?: string; status?: number }
+      if (err.status) {
+        throw error
       }
+      setResponseStatus(500)
+      throw { message: err.message || 'Failed to update profile', status: 500 }
     }
   })
 

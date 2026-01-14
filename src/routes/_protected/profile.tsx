@@ -76,7 +76,7 @@ function ProfilePage() {
   const isOwner = currentUser?.email === siteConfig.owner.email || 
                   currentUser?.email === import.meta.env.VITE_OWNER_EMAIL
   
-  const isViewingOwnProfile = !viewingUserId || viewingUserId === currentUser?.$id
+  const isViewingOwnProfile = !viewingUserId || viewingUserId === currentUser?.id
 
   useEffect(() => {
     if (currentUser) {
@@ -158,8 +158,8 @@ function ProfilePage() {
     setSaveError(null)
   }
 
-  const memberSince = currentUser?.$createdAt 
-    ? new Date(currentUser.$createdAt).toLocaleDateString('de-DE', {
+  const memberSince = currentUser?.createdAt 
+    ? new Date(currentUser.createdAt).toLocaleDateString('de-DE', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -639,7 +639,7 @@ function ProfilePage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <CopyableField
                         label="User ID"
-                        value={currentUser.$id || 'N/A'}
+                        value={currentUser?.id || 'N/A'}
                         icon={Fingerprint}
                         fieldKey="userId"
                       />
@@ -651,13 +651,13 @@ function ProfilePage() {
                       />
                       <CopyableField
                         label="Username"
-                        value={`@${currentUser.name?.toLowerCase().replace(/\s+/g, '') || currentUser.email?.split('@')[0]}`}
+                        value={`@${currentUser.username || currentUser.name?.toLowerCase().replace(/\s+/g, '') || currentUser.email?.split('@')[0]}`}
                         icon={AtSign}
                         fieldKey="username"
                       />
                       <CopyableField
                         label="Profile URL"
-                        value={`${window.location.origin}/profile?user=${currentUser.$id}`}
+                        value={`${window.location.origin}/profile?user=${currentUser?.id}`}
                         icon={LinkIcon}
                         fieldKey="profileUrl"
                       />

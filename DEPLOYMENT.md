@@ -1,17 +1,18 @@
-# 🚀 Deployment Guide
+# 🚀 Eziox Deployment Guide
 
-This guide covers deploying your portfolio with **Vercel** for frontend hosting and **Appwrite** for backend services (database & storage).
+This guide covers deploying **Eziox** with **Vercel** for frontend hosting and **Neon** for the PostgreSQL database.
 
 ## 🏗️ Architecture
 
 - **Frontend**: Vercel Edge Network (TanStack Start SSR)
-- **Backend**: Appwrite Cloud (Database & Storage only)
-- **Live Site**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
+- **Database**: Neon PostgreSQL (Serverless)
+- **ORM**: Drizzle ORM
+- **Live Site**: [eziox.link](https://eziox.link)
 
 ## 📋 Prerequisites
 
 - [Vercel Account](https://vercel.com) - For frontend hosting
-- [Appwrite Cloud Account](https://cloud.appwrite.io) - For backend services only
+- [Neon Account](https://console.neon.tech) - For PostgreSQL database
 - [Bun](https://bun.sh) or Node.js installed
 - Git repository connected to GitHub
 
@@ -19,16 +20,17 @@ This guide covers deploying your portfolio with **Vercel** for frontend hosting 
 
 ### Required Variables
 
-Create a `.env.local` file (or configure in your hosting platform):
+Create a `.env` file (or configure in your hosting platform):
 
 ```bash
-# Appwrite Configuration
-VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-VITE_APPWRITE_PROJECT_ID=696615c200386f6d3ba3
-APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-APPWRITE_PROJECT_ID=696615c200386f6d3ba3
-APPWRITE_API_KEY=your_api_key_here
-APPWRITE_BUCKET_ID=portfolio-images
+# Database (Neon PostgreSQL)
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require
+
+# Authentication
+AUTH_SECRET=your-super-secret-key-generate-with-openssl-rand-base64-32
+
+# Owner Account (gets admin privileges)
+VITE_OWNER_EMAIL=your-email@example.com
 
 # Server Configuration
 PORT=3000
@@ -37,12 +39,10 @@ NODE_ENV=production
 
 ## 🌐 Deploy Frontend to Vercel
 
-**Note**: Vercel hosts the entire frontend application. Appwrite is only used for backend services (database & storage).
-
 ### Option 1: GitHub Integration (Recommended)
 
 1. Go to [vercel.com/new](https://vercel.com/new)
-2. Import your GitHub repository: `XSaitoKungX/portfolio-v2`
+2. Import your GitHub repository
 3. Vercel auto-detects TanStack Start configuration
 4. Add environment variables (see below)
 5. Click **Deploy**!
@@ -70,75 +70,60 @@ vercel --prod
 Add these in **Project Settings → Environment Variables**:
 
 ```bash
-# Required for all environments (Production, Preview, Development)
-VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-VITE_APPWRITE_PROJECT_ID=696615c200386f6d3ba3
-
-# Optional: Server-side API key (if using Appwrite Admin SDK)
-APPWRITE_API_KEY=your_api_key_here
-APPWRITE_BUCKET_ID=portfolio-images
+# Required for all environments
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require
+AUTH_SECRET=your-super-secret-key
+VITE_OWNER_EMAIL=your-email@example.com
+NODE_ENV=production
 ```
 
-### Custom Domain (Optional)
+### Custom Domain
 
 1. Go to **Project Settings → Domains**
-2. Add your custom domain (e.g., `portfolio.novaplex.xyz`)
+2. Add your custom domain (e.g., `eziox.link`)
 3. Configure DNS records as instructed
 4. Wait for SSL certificate provisioning
 
-## ☁️ Appwrite Backend Setup (Database & Storage Only)
+## 🐘 Neon Database Setup
 
-### 1. Install Appwrite CLI
+### 1. Create Neon Project
 
-```bash
-npm install -g appwrite-cli
-```
+1. Go to [console.neon.tech](https://console.neon.tech)
+2. Click **New Project**
+3. Choose a region close to your Vercel deployment
+4. Copy the connection string
 
-### 2. Login to Appwrite
-
-```bash
-appwrite login
-```
-
-### 3. Deploy Backend Resources
+### 2. Push Database Schema
 
 ```bash
-# Push database collections
-appwrite push
-
-# Select: Collections (Legacy Databases)
-# Select: Blog Posts, Projects
-
-# Push storage buckets
-appwrite push buckets
-
-# Select: Portfolio Images
+# Push schema to Neon (creates all tables)
+bun run db:push
 ```
 
-### 4. Set Permissions
+### 3. Database Tables
 
-Go to your Appwrite Console:
+The schema includes:
 
-1. **Database → portfolio-db → blog-posts**
-   - Settings → Permissions
-   - Add: `Role: Any` with `Read` permission
-
-2. **Database → portfolio-db → projects**
-   - Settings → Permissions
-   - Add: `Role: Any` with `Read` permission
-
-3. **Storage → portfolio-images**
-   - Settings → Permissions
-   - Add: `Role: Any` with `Read` permission
+| Table | Purpose |
+|-------|--------|
+| `users` | User accounts |
+| `profiles` | User profile data (bio, avatar, banner) |
+| `sessions` | Auth sessions |
+| `user_links` | Linktree-style links |
+| `user_stats` | Profile views, clicks, score |
+| `follows` | Follower relationships |
+| `blog_posts` | Blog articles |
+| `projects` | Portfolio projects |
+| `activity_log` | User activity tracking |
 
 ## 🔄 Continuous Deployment
 
 ### Automatic Deployments (Vercel)
 
-Vercel automatically deploys your frontend:
+Vercel automatically deploys:
 
-- **Production**: Pushes to `main` branch → [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
-- **Preview**: Pull requests and other branches → `https://portfolio-v2-*.vercel.app`
+- **Production**: Pushes to `main` branch → [eziox.link](https://eziox.link)
+- **Preview**: Pull requests → `https://eziox-*.vercel.app`
 
 ### Manual Deployment
 
@@ -176,8 +161,7 @@ bun run deploy:preview
          ▼
 ┌──────────────────┐
 │  Live Site       │
-│  portfolio.      │
-│  novaplex.xyz    │
+│  eziox.link      │
 └──────────────────┘
 ```
 
@@ -197,13 +181,14 @@ Visit `http://localhost:4173` to test the production build locally.
 
 ### Production Checklist
 
-- [ ] All environment variables configured
-- [ ] Appwrite collections and buckets deployed
-- [ ] Permissions set correctly (read access for public data)
+- [ ] All environment variables configured in Vercel
+- [ ] Database schema pushed to Neon (`bun run db:push`)
+- [ ] Owner email set correctly (`VITE_OWNER_EMAIL`)
+- [ ] Auth secret is secure and unique
 - [ ] RSS feed accessible at `/rss`
-- [ ] Sitemap accessible at `/sitemap`
-- [ ] Blog posts loading correctly
-- [ ] Images loading from Appwrite storage
+- [ ] Leaderboard working at `/leaderboard`
+- [ ] Public profiles working at `/u/username`
+- [ ] Sign up/sign in working
 - [ ] Theme switcher working
 - [ ] Mobile responsive
 - [ ] Performance optimized (check Lighthouse score)
@@ -223,12 +208,12 @@ bun run generate:routes
 bun run build
 ```
 
-### Appwrite Connection Issues
+### Database Connection Issues
 
-1. Verify `VITE_APPWRITE_ENDPOINT` is correct
-2. Check `VITE_APPWRITE_PROJECT_ID` matches your project
-3. Ensure API key has necessary permissions
-4. Check Appwrite console for CORS settings
+1. Verify `DATABASE_URL` is correct
+2. Check Neon project is active (not suspended)
+3. Ensure connection string includes `?sslmode=require`
+4. Check Neon dashboard for connection limits
 
 ### 404 on Routes
 
@@ -262,16 +247,17 @@ Use Vercel Analytics to monitor:
 
 - Never commit `.env` or `.env.local` files
 - Use environment variables for all secrets
-- Keep Appwrite API keys secure
+- Generate strong `AUTH_SECRET` with `openssl rand -base64 32`
 - Enable HTTPS (automatic on Vercel)
-- Set proper CORS policies in Appwrite
+- Use secure session cookies (httpOnly, secure, sameSite)
 
 ## 📚 Additional Resources
 
 - [Vercel Documentation](https://vercel.com/docs)
-- [Appwrite Documentation](https://appwrite.io/docs)
+- [Neon Documentation](https://neon.tech/docs)
+- [Drizzle ORM Docs](https://orm.drizzle.team)
+- [TanStack Start Docs](https://tanstack.com/start)
 - [TanStack Router Docs](https://tanstack.com/router)
-- [Vite Documentation](https://vitejs.dev)
 
 ## 🆘 Support
 
@@ -279,5 +265,6 @@ If you encounter issues:
 
 1. Check the troubleshooting section above
 2. Review Vercel deployment logs
-3. Check Appwrite console for errors
+3. Check Neon dashboard for database status
 4. Verify all environment variables are set correctly
+5. Run `bun run db:push` to sync schema

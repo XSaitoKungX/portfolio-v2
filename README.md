@@ -2,7 +2,7 @@
 <!-- 🎨 ANIMATED HEADER BANNER -->
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Portfolio&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Modern%20Full-Stack%20Portfolio%20%7C%20TanStack%20Start%20%7C%20React%2019&descAlignY=52&descSize=18"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Eziox&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Modern%20Bio%20Link%20Platform%20%7C%20TanStack%20Start%20%7C%20Neon%20PostgreSQL&descAlignY=52&descSize=18"/>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 🚀 LIVE DEMO -->
@@ -12,12 +12,12 @@
 
 ## 🌐 Live Demo
 
-**🔗 [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)**
+**🔗 [eziox.link](https://eziox.link)**
 
-<a href="https://portfolio.novaplex.xyz/" target="_blank">
+<a href="https://eziox.link" target="_blank">
   <img src="https://img.shields.io/badge/🚀_Live_Site-Visit_Now-6366f1?style=for-the-badge&labelColor=1e293b" alt="Live Demo"/>
 </a>
-<a href="https://vercel.com/xsaitokungx/portfolio-v2" target="_blank">
+<a href="https://vercel.com" target="_blank">
   <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"/>
 </a>
 
@@ -28,45 +28,48 @@
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-19.2.3-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
   <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
-  <img src="https://img.shields.io/badge/TanStack_Start-1.149-FF4154?style=for-the-badge&logo=react&logoColor=white" alt="TanStack Start"/>
+  <img src="https://img.shields.io/badge/TanStack_Start-SSR-FF4154?style=for-the-badge&logo=react&logoColor=white" alt="TanStack Start"/>
   <img src="https://img.shields.io/badge/Bun-Runtime-000000?style=for-the-badge&logo=bun&logoColor=white" alt="Bun"/>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind"/>
-  <img src="https://img.shields.io/badge/Appwrite-Backend-F02E65?style=for-the-badge&logo=appwrite&logoColor=white" alt="Appwrite"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind"/>
+  <img src="https://img.shields.io/badge/Neon-PostgreSQL-00E599?style=for-the-badge&logo=postgresql&logoColor=white" alt="Neon"/>
+  <img src="https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black" alt="Drizzle"/>
   <img src="https://img.shields.io/badge/shadcn%2Fui-Components-000000?style=for-the-badge&logo=shadcnui&logoColor=white" alt="shadcn/ui"/>
-  <img src="https://img.shields.io/badge/Vite-Build_Tool-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
 </p>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 📖 ABOUT THE PROJECT -->
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 
-## <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30"> About This Project
+## <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30"> About Eziox
 
-A modern, high-performance portfolio project built with the latest web technologies. This project combines **TanStack Start** for Server-Side Rendering, **React 19** for the UI, **Appwrite** as Backend-as-a-Service, and **Tailwind CSS v4** for modern styling.
+**Eziox** is a modern bio link platform built with cutting-edge web technologies. Create your personalized profile page with custom links, track analytics, and climb the leaderboard. Built with **TanStack Start** for SSR, **React 19**, **Neon PostgreSQL** with **Drizzle ORM**, and **Tailwind CSS v4**.
 
 ### 🏗️ Architecture
 
-- **Frontend (Vercel)**: TanStack Start SSR Application on Vercel Edge Network
-- **Backend (Appwrite)**: Database & Storage on Appwrite Cloud
-- **Domain**: [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)
+- **Frontend**: TanStack Start SSR on Vercel Edge Network
+- **Database**: Neon PostgreSQL (Serverless)
+- **ORM**: Drizzle ORM with type-safe queries
+- **Auth**: Custom session-based authentication
+- **Domain**: [eziox.link](https://eziox.link)
 
 ### ✨ Key Features
 
-- 🚀 **TanStack Start** - Full-Stack React Framework with SSR on Vercel
-- ⚡ **Bun Runtime** - Blazing fast JavaScript runtime
+- � **Bio Links** - Linktree-style customizable link pages
+- 📊 **Analytics** - Track profile views, link clicks, and engagement
+- 🏆 **Leaderboard** - User ranking system with scores
+- 👤 **User Profiles** - Custom avatars, banners, bios, and social links
+- 🔐 **Authentication** - Secure session-based auth with bcrypt
 - 🎨 **5 Theme Variants** - Royal Purple, Midnight, Sunset, Neon, Aurora
 - 📝 **Blog System** - Markdown-based blog posts with categories & tags
-- 🔐 **Authentication** - Complete auth system with Appwrite
-- 🎯 **Type-Safe Routing** - File-based routing with TanStack Router
-- 💾 **Appwrite Backend** - Database & Storage for blog posts and projects
-- 🎭 **shadcn/ui Components** - Modern, accessible UI components
-- 📱 **Responsive Design** - Mobile-first approach
-- 🌐 **Edge Deployment** - Deployed on Vercel Edge Network
+- � **Projects** - Showcase your work with detailed project pages
+- 🎭 **shadcn/ui** - Modern, accessible UI components
+- 📱 **Responsive** - Mobile-first design
+- ⚡ **Fast** - Bun runtime + Vercel Edge deployment
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 🛠️ TECH STACK -->
@@ -97,12 +100,14 @@ A modern, high-performance portfolio project built with the latest web technolog
 <summary><b>⚙️ Backend & Infrastructure</b></summary>
 <br/>
 
-| Technology         | Version  | Purpose              |
-| ------------------ | -------- | -------------------- |
-| **Appwrite**       | 21.1.0   | Backend-as-a-Service |
-| **Bun**            | Latest   | JavaScript Runtime   |
-| **TanStack Start** | 1.149.2  | SSR Framework        |
-| **Vite**           | Rolldown | Build Tool           |
+| Technology         | Purpose                    |
+| ------------------ | -------------------------- |
+| **Neon**           | Serverless PostgreSQL      |
+| **Drizzle ORM**    | Type-safe database queries |
+| **Bun**            | JavaScript Runtime         |
+| **TanStack Start** | SSR Framework              |
+| **Vite**           | Build Tool (Rolldown)      |
+| **bcrypt**         | Password hashing           |
 
 </details>
 
@@ -125,11 +130,11 @@ A modern, high-performance portfolio project built with the latest web technolog
 
 ## <img src="https://media.giphy.com/media/iY8CRBdQXODJSCERIr/giphy.gif" width="30"> Getting Started
 
-### 📋 Prerequisites
+### � Prerequisites
 
 - **Bun** >= 1.0.0 ([Installation](https://bun.sh/docs/installation))
 - **Node.js** >= 20.0.0 (optional, for npm compatibility)
-- **Appwrite** Account ([Sign up](https://cloud.appwrite.io/register))
+- **Neon** Account ([Sign up](https://console.neon.tech))
 
 ### ⚡ Quick Start
 
@@ -143,7 +148,7 @@ bun install
 
 # 3. Configure environment variables
 cp .env.example .env
-# Edit .env and add your Appwrite credentials
+# Edit .env and add your Neon database URL and auth secret
 
 # 4. Start development server
 bun run dev
@@ -156,20 +161,20 @@ The app is now running on **http://localhost:5173** 🎉
 Create a `.env` file in the root directory:
 
 ```bash
-# Appwrite Configuration
-APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1
-APPWRITE_API_KEY=your_api_key_here
-APPWRITE_PROJECT_ID=your_project_id_here
-APPWRITE_BUCKET_ID=portfolio-images
+# Database (Neon PostgreSQL)
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require
+
+# Authentication
+AUTH_SECRET=your-super-secret-key-here
+
+# Owner Account
+VITE_OWNER_EMAIL=your-email@example.com
 
 # Server Configuration
 PORT=3000
-
-# Optional: Analytics
-INSTRUMENTATION_SCRIPT_SRC=
 ```
 
-> **⚠️ Important:** The app requires valid Appwrite credentials to function!
+> **⚠️ Important:** Get your `DATABASE_URL` from [console.neon.tech](https://console.neon.tech)!
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
 <!-- 📦 AVAILABLE SCRIPTS -->
@@ -204,34 +209,31 @@ bun run clean            # Clean build artifacts
 ## 📁 Project Structure
 
 ```
-portfolio/
+eziox/
 ├── src/
 │   ├── components/          # React Components
-│   │   ├── auth/           # Authentication components
 │   │   ├── portfolio/      # Portfolio-specific components
 │   │   └── ui/             # shadcn/ui components
 │   ├── hooks/              # Custom React Hooks
-│   ├── integrations/       # Third-party integrations
-│   │   └── appwrite/       # Appwrite client & server
 │   ├── lib/                # Utility functions & configs
-│   │   ├── blog-data.ts    # Blog post data
-│   │   ├── markdown.ts     # Markdown processing
 │   │   ├── site-config.ts  # Site configuration
 │   │   └── utils.ts        # Helper functions
 │   ├── routes/             # TanStack Router routes
-│   │   ├── _public/        # Public routes
-│   │   ├── _auth/          # Auth routes
-│   │   ├── _protected/     # Protected routes
+│   │   ├── _public/        # Public routes (home, blog, leaderboard)
+│   │   ├── _auth/          # Auth routes (sign-in, sign-up)
+│   │   ├── _protected/     # Protected routes (profile)
 │   │   └── __root.tsx      # Root layout
 │   ├── server/             # Server-side code
+│   │   ├── db/             # Database schema & connection
+│   │   ├── functions/      # Server functions (auth, links, users)
+│   │   └── lib/            # Auth utilities
 │   ├── styles.css          # Global styles
 │   └── router.tsx          # Router configuration
+├── content/                # Markdown content
+│   └── blog/               # Blog posts (.md files)
 ├── public/                 # Static assets
-├── dist/                   # Build output
-├── server.ts               # Production server
+├── drizzle.config.ts       # Drizzle ORM configuration
 ├── vite.config.ts          # Vite configuration
-├── tsconfig.json           # TypeScript configuration
-├── appwrite.json           # Appwrite schema
 ├── components.json         # shadcn/ui configuration
 └── package.json            # Dependencies & scripts
 ```
@@ -270,8 +272,21 @@ Each theme includes:
 
 - Sign Up / Sign In / Sign Out
 - Protected Routes
-- Session Management
-- Appwrite Integration
+- Session-based Auth with secure cookies
+- Password hashing with bcrypt
+
+### 🔗 Bio Links
+
+- Create unlimited custom links
+- Drag & drop reordering
+- Click tracking & analytics
+- Custom colors per link
+
+### 🏆 Leaderboard
+
+- User ranking by score
+- Sort by views, clicks, followers
+- Public profile pages at `/u/username`
 
 ### 🎯 Adding shadcn/ui Components
 
@@ -289,8 +304,8 @@ bunx shadcn@latest add dialog
 
 ### 🌐 Live Production
 
-**Frontend**: Deployed on [Vercel](https://vercel.com) → [portfolio.novaplex.xyz](https://portfolio.novaplex.xyz/)  
-**Backend**: [Appwrite Cloud](https://cloud.appwrite.io) (Database & Storage)
+**Frontend**: Deployed on [Vercel](https://vercel.com) → [eziox.link](https://eziox.link)  
+**Database**: [Neon](https://neon.tech) (Serverless PostgreSQL)
 
 ### Quick Deploy
 
@@ -315,22 +330,20 @@ bun run deploy:preview
 │  ┌──────────────────────────────────────────────────┐   │
 │  │   TanStack Start SSR Application                 │   │
 │  │   - Server-Side Rendering                        │   │
-│  │   - API Routes (/rss, /sitemap)                  │   │
+│  │   - Server Functions (Auth, Links, Users)        │   │
 │  │   - Static Assets                                │   │
 │  └──────────────────┬───────────────────────────────┘   │
 └─────────────────────┼───────────────────────────────────┘
                       │
                       ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Appwrite Cloud                             │
+│              Neon PostgreSQL                            │
 │  ┌──────────────────────────────────────────────────┐   │
-│  │   Database: portfolio-db                         │   │
-│  │   - blog-posts collection                        │   │
-│  │   - projects collection                          │   │
-│  │                                                  │   │
-│  │   Storage: portfolio-images                      │   │
-│  │   - Blog images                                  │   │
-│  │   - Project screenshots                          │   │
+│  │   Tables:                                        │   │
+│  │   - users, profiles, sessions                    │   │
+│  │   - user_links, user_stats                       │   │
+│  │   - blog_posts, projects                         │   │
+│  │   - follows, activity_log                        │   │
 │  └──────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -355,10 +368,9 @@ For complete deployment instructions, see **[DEPLOYMENT.md](./DEPLOYMENT.md)**
 Topics covered:
 
 - Vercel deployment (CLI & GitHub)
-- Appwrite backend setup (Database & Storage only)
+- Neon database setup
 - Environment variables configuration
-- Performance optimization
-- Troubleshooting
+- Database migrations with Drizzle
 - Security best practices
 
 ### Environment Variables
@@ -366,13 +378,16 @@ Topics covered:
 Required for production (set in Vercel Dashboard):
 
 ```bash
-# Client-side (exposed to browser)
-VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-VITE_APPWRITE_PROJECT_ID=696615c200386f6d3ba3
+# Database
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require
 
-# Server-side (secure - Vercel only)
-APPWRITE_API_KEY=your_api_key_here
-APPWRITE_BUCKET_ID=portfolio-images
+# Authentication
+AUTH_SECRET=your-super-secret-key
+
+# Owner
+VITE_OWNER_EMAIL=your-email@example.com
+
+# Environment
 NODE_ENV=production
 ```
 
@@ -387,7 +402,8 @@ NODE_ENV=production
 - [TanStack Start](https://tanstack.com/start/latest) - Full-Stack React Framework
 - [TanStack Router](https://tanstack.com/router/latest) - Type-safe Routing
 - [TanStack Query](https://tanstack.com/query/latest) - Data Fetching
-- [Appwrite](https://appwrite.io/docs) - Backend-as-a-Service
+- [Neon](https://neon.tech/docs) - Serverless PostgreSQL
+- [Drizzle ORM](https://orm.drizzle.team) - TypeScript ORM
 - [Tailwind CSS](https://tailwindcss.com/docs) - Utility-first CSS
 - [shadcn/ui](https://ui.shadcn.com) - Component Library
 - [Bun](https://bun.sh/docs) - JavaScript Runtime
@@ -435,7 +451,8 @@ This project is licensed under the MIT License.
 ## 🙏 Acknowledgments
 
 - [TanStack](https://tanstack.com) - For the amazing libraries
-- [Appwrite](https://appwrite.io) - For the Backend-as-a-Service
+- [Neon](https://neon.tech) - For serverless PostgreSQL
+- [Drizzle](https://orm.drizzle.team) - For the TypeScript ORM
 - [shadcn](https://ui.shadcn.com) - For the UI components
 - [Vercel](https://vercel.com) - For the hosting
 
@@ -447,11 +464,12 @@ This project is licensed under the MIT License.
 
 ```text
 🎨 UI/UX Design      ████████████████████████░░   95% - Modern & Responsive
-🔐 Authentication    ██████████████████████████   100% - Fully Implemented
-📝 Blog System       ████████████████████░░░░░░   85% - Core Features Done
-⚡ Performance       ████████████████████████░░   95% - Optimized Build
-🧪 Testing           ████████████░░░░░░░░░░░░░░   50% - In Progress
-📚 Documentation     ████████████████████████░░   95% - Comprehensive
+🔐 Authentication    ██████████████████████████   100% - Session-based Auth
+🔗 Bio Links         ██████████████████████████   100% - Fully Implemented
+🏆 Leaderboard       ██████████████████████████   100% - Ranking System
+📝 Blog System       ████████████████████░░░░░░   85% - Markdown-based
+📁 Projects          ████████████████████░░░░░░   85% - Schema Ready
+⚡ Performance       ████████████████████████░░   95% - Edge Optimized
 ```
 
 <!-- ═══════════════════════════════════════════════════════════════════════════════ -->

@@ -91,13 +91,13 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   metadata: {
-    title: 'Personal Portfolio',
+    title: 'Eziox',
     description:
-      'A modern portfolio for content creators and professionals showcasing work, thoughts, and expertise.',
-    url: 'https://portfolio.novaplex.xyz',
+      'A modern bio link platform for content creators and professionals showcasing work, thoughts, and expertise.',
+    url: 'https://eziox.link',
     language: 'en',
     copyright: `© ${new Date().getFullYear()} All rights reserved.`,
-    icon: '/saito.png',
+    icon: '/icon.png',
   },
 
   owner: {

@@ -45,6 +45,10 @@ export const Route = createFileRoute('/_auth/sign-up')({
 
 const signUpSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
+  username: z.string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(30, 'Username is too long')
+    .regex(/^[a-zA-Z0-9_-]+$/, 'Only letters, numbers, underscores, and hyphens'),
   email: z.string().email('Please enter a valid email address'),
   password: z
     .string()
@@ -72,6 +76,7 @@ function SignUpPage() {
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       name: '',
+      username: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -268,6 +273,45 @@ function SignUpPage() {
               </div>
             </motion.div>
 
+            {/* Username field */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.52 }}
+            >
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground-muted)' }}>
+                Username <span className="text-red-400">*</span>
+              </label>
+              <div
+                className="relative"
+                onFocus={() => setFocusedField('username')}
+                onBlur={() => setFocusedField(null)}
+              >
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <span
+                    className="text-lg font-medium transition-colors duration-300"
+                    style={{ color: focusedField === 'username' ? 'var(--primary)' : 'var(--foreground-muted)' }}
+                  >
+                    @
+                  </span>
+                </div>
+                <input
+                  {...form.register('username')}
+                  type="text"
+                  placeholder="yourname"
+                  className="w-full pl-12 pr-4 py-3.5 rounded-xl outline-none transition-all duration-300"
+                  style={{
+                    background: 'var(--background-secondary)',
+                    border: `1px solid ${form.formState.errors.username ? 'rgba(239, 68, 68, 0.5)' : focusedField === 'username' ? 'var(--primary)' : 'var(--border)'}`,
+                    color: 'var(--foreground)',
+                  }}
+                />
+              </div>
+              {form.formState.errors.username && (
+                <p className="mt-2 text-sm text-red-400">{form.formState.errors.username.message}</p>
+              )}
+            </motion.div>
+
             {/* Email field */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -275,7 +319,7 @@ function SignUpPage() {
               transition={{ delay: 0.55 }}
             >
               <label className="block text-sm font-medium mb-2" style={{ color: 'var(--foreground-muted)' }}>
-                Email
+                Email <span className="text-red-400">*</span>
               </label>
               <div
                 className="relative"
