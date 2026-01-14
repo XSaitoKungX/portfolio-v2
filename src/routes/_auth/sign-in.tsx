@@ -210,7 +210,7 @@ function SignInPage() {
                 onBlur={() => setFocusedField(null)}
               >
                 <div
-                  className="absolute inset-0 rounded-xl transition-opacity duration-300"
+                  className="absolute inset-0 rounded-xl transition-opacity duration-300 pointer-events-none"
                   style={{
                     background: 'linear-gradient(135deg, var(--primary), var(--accent))',
                     opacity: focusedField === 'email' ? 0.2 : 0,
@@ -261,7 +261,7 @@ function SignInPage() {
                 onBlur={() => setFocusedField(null)}
               >
                 <div
-                  className="absolute inset-0 rounded-xl transition-opacity duration-300"
+                  className="absolute inset-0 rounded-xl transition-opacity duration-300 pointer-events-none"
                   style={{
                     background: 'linear-gradient(135deg, var(--primary), var(--accent))',
                     opacity: focusedField === 'password' ? 0.2 : 0,
